@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/table";
 import { tenants } from "@/constants/data";
 import Papa from "papaparse";
+import RetellCall from "@/components/RetellCall";
 
 const Dashboard = () => {
   const [data, setData] = useState([]);
@@ -55,6 +56,7 @@ const Dashboard = () => {
               <TableHead className="2/6">Address</TableHead>
               <TableHead className="w-1/6">Phone Number</TableHead>
               <TableHead className="w-2/6">Note Summary</TableHead>
+              <TableHead className="w-1/6">Action</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -64,6 +66,9 @@ const Dashboard = () => {
                 <TableCell>{tenant.address}</TableCell>
                 <TableCell>{tenant.phoneNumber}</TableCell>
                 <TableCell className="">{tenant.note}</TableCell>
+                <TableCell className="">
+                  <RetellCall />
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

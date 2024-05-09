@@ -17,3 +17,8 @@ export type ButtonProps = {
   isSecondary?: boolean;
   isDisabled?: boolean;
 };
+
+export type RegisterCallResponse = {
+  callId?: string;
+  sampleRate: number;
+};

@@ -1,9 +1,9 @@
-import { HOME, SETTINGS } from "./path";
+import { DASHBOARD, SETTINGS } from "./path";
 
 export const navLinks = [
   {
-    path: HOME,
-    label: "Home",
+    path: DASHBOARD,
+    label: "Overview",
   },
   {
     path: SETTINGS,
