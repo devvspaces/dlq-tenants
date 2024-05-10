@@ -125,7 +125,7 @@ const Register = () => {
         </form>
       </Form>
 
-      <p className="text-center text-offgrey text-sm mt-2 hidden">
+      <p className="text-center text-offgrey text-sm mt-2">
         Already have an account?{" "}
         <Link href={LOGIN} className="font-bold text-secondary cursor-pointer">
           Login

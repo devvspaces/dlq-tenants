@@ -113,7 +113,7 @@ const Login = () => {
         </form>
       </Form>
 
-      <p className="text-center text-offgrey text-sm mt-2 hidden">
+      <p className="text-center text-offgrey text-sm mt-2">
         Don’t have an account yet?{" "}
         <Link
           href={REGISTER}
