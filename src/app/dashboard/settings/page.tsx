@@ -12,7 +12,7 @@ const Settings = () => {
       <div className="mt-10 md:w-1/2 mx-auto">
         <div className="flex items-center justify-between mb-5">
           <p className="w-full">Change AI Prompt</p>
-          <Dialog className="w-full">
+          <Dialog>
             <DialogTrigger>
               <Button>Change</Button>
             </DialogTrigger>
@@ -21,7 +21,7 @@ const Settings = () => {
         </div>
         <div className="flex items-center justify-between mb-5">
           <p className="w-full">Select Voice</p>
-          <Dialog className="w-full">
+          <Dialog>
             <DialogTrigger>
               <Button>Change</Button>
             </DialogTrigger>
@@ -30,7 +30,7 @@ const Settings = () => {
         </div>
         <div className="flex items-center justify-between mb-5">
           <p className="w-full">Set Google Sheet to send data</p>
-          <Dialog className="w-full">
+          <Dialog>
             <DialogTrigger>
               <Button>Set</Button>
             </DialogTrigger>
