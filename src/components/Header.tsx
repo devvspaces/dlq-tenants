@@ -3,11 +3,21 @@
 import { navLinks } from "@/constants/route";
 import { LogOutIcon } from "lucide-react";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 import Auth from "@/utils/auth";
+import { User } from "@/utils/types";
 
 const Header = () => {
-  const user = JSON.parse(localStorage.getItem("user") || "");
+  const [user, setUser] = useState<User>({
+    uid: "",
+    displayName: "",
+    email: "",
+    photoURL: "",
+  });
+
+  if (typeof window !== "undefined") {
+    setUser(JSON.parse(window.localStorage.getItem("user") || ""));
+  }
 
   return (
     <header className="fixed w-full bg-white top-0 flex items-center justify-between py-4 px-10">
