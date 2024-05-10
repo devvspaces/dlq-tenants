@@ -19,6 +19,7 @@ import { registerSchema } from "@/lib/schema";
 import InputField from "@/components/InputField";
 import Loading from "@/components/Loading";
 import { useToast } from "@/components/ui/use-toast";
+import Auth from "@/utils/auth";
 
 import google from "@/assets/icons/google.png";
 
@@ -38,46 +39,7 @@ const Register = () => {
   const { toast } = useToast();
   const { handleSubmit } = form;
 
-  const onSubmit = async (values: z.infer<typeof registerSchema>) => {
-    setIsLoading(true);
-
-    // const response = await signIn("login", {
-    //   redirect: false,
-    //   email: values.email,
-    //   password: values.password,
-    // });
-
-    // if (response?.ok) {
-    //   if (session.data && !session.data?.user.isVerified) {
-    //     toast({
-    //       title: "User not verified",
-    //       description: "Please check you email for code",
-    //     });
-
-    //     return (window.location.href = VERIFY);
-    //   }
-
-    //   toast({
-    //     title: "User Login Successful",
-    //   });
-
-    //   if (session.data?.user.isBorrower) {
-    //     return (window.location.href = BORROWERDASHBOARD);
-    //   } else {
-    //     return (window.location.href = INVESTORDASHBOARD);
-    //   }
-    // } else {
-    //   toast({
-    //     title: "User Login Failed",
-    //     description: response?.error,
-    //     variant: "destructive",
-    //   });
-    // }
-
-    setIsLoading(false);
-  };
-
-  const handleRegisterWithGoogle = () => {};
+  const onSubmit = async (values: z.infer<typeof registerSchema>) => {};
 
   return (
     <>
@@ -89,19 +51,19 @@ const Register = () => {
 
       <Button
         className="!bg-white !border-[#EAF8E9] !rounded-md !text-black flex items-center justify-center gap-3 hover:!shadow-sm hover:!bg-[#EAF8E9]"
-        onClick={handleRegisterWithGoogle}
+        onClick={() => Auth.signInWithGoogle()}
       >
         Register with Google <Image src={google} alt="google" />
       </Button>
 
-      <div className="flex items-center text-offgrey text-sm my-10 gap-2">
+      <div className="items-center text-offgrey text-sm my-10 gap-2 hidden">
         <hr className="border-b border-[#E2E8F0] w-full" />
         <p>or</p>
         <hr className="border-b border-[#E2E8F0] w-full" />
       </div>
 
       <Form {...form}>
-        <form onSubmit={handleSubmit(onSubmit)} className="mt-3">
+        <form onSubmit={handleSubmit(onSubmit)} className="mt-3 hidden">
           <FormField
             control={form.control}
             name="name"
@@ -163,7 +125,7 @@ const Register = () => {
         </form>
       </Form>
 
-      <p className="text-center text-offgrey text-sm mt-2">
+      <p className="text-center text-offgrey text-sm mt-2 hidden">
         Already have an account?{" "}
         <Link href={LOGIN} className="font-bold text-secondary cursor-pointer">
           Login

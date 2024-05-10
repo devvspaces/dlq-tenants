@@ -1,4 +1,22 @@
 import { jwtDecode } from "jwt-decode";
+import { signInWithPopup } from "firebase/auth";
+import { auth, provider } from "@/lib/firebase";
+import { LOGIN, DASHBOARD } from "@/constants/path";
+
+// SignIn with google
+const signInWithGoogle = () => {
+  signInWithPopup(auth, provider).then(async (data) => {
+    // Save token and user data
+    const token = await data.user.getIdToken();
+    localStorage.setItem("accessToken", token);
+
+    localStorage.setItem("user", JSON.stringify(data.user));
+
+    setTimeout(() => {
+      window.location.href = DASHBOARD;
+    }, 2000);
+  });
+};
 
 const setToken = (token: string) => {
   localStorage.setItem("token", token);
@@ -25,13 +43,9 @@ const getDecodedJwt = () => {
   }
 };
 
-const removeToken = () => {
-  localStorage.removeItem("token");
-};
-
 const logOut = () => {
-  removeToken();
-  window.location.replace("/");
+  localStorage.clear();
+  window.location.replace(LOGIN);
 };
 
 const isAuthenticated = () => {
@@ -48,13 +62,13 @@ const isAuthenticated = () => {
 };
 
 const Auth = {
+  signInWithGoogle,
   isAuthenticated,
   getDecodedJwt,
   setToken,
   getToken,
   setRefreshToken,
   getRefreshToken,
-  removeToken,
   logOut,
 };
 
