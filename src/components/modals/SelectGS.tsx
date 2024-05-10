@@ -23,7 +23,7 @@ const SelectGSModal = () => {
           Select Google Sheet
         </DialogTitle>
         <DialogDescription>
-          <div className="grid gird-cols-1 md:grid-cols-2 gap-5 md:w-2/3 mx-auto text-center text-[#232555]"></div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:w-2/3 mx-auto text-center text-[#232555]"></div>
           {sheets.map((sheet, index) => (
             <div
               key={index}
