@@ -32,7 +32,7 @@ const Dashboard = () => {
       },
     });
   };
-  
+
   return (
     <div>
       <div className="flex gap-10">
@@ -40,7 +40,7 @@ const Dashboard = () => {
           <h1>Overview</h1>
         </div>
         <div className="w-full">
-          <h1>Tenants Details</h1>
+          <h1>Campaigns</h1>
           <p>Upload tenant details</p>
           <FileInput maxSize={maxSize} onFileChange={handleFileChange} />
         </div>
