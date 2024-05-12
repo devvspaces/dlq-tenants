@@ -14,6 +14,7 @@ import {
 import { tenants } from "@/constants/data";
 import Papa from "papaparse";
 import RetellCall from "@/components/RetellCall";
+import Button from "@/components/Button";
 
 const Dashboard = () => {
   const [data, setData] = useState([]);
@@ -38,12 +39,21 @@ const Dashboard = () => {
       <div className="flex gap-10">
         <div className="w-full">
           <h1>Overview</h1>
+
+          <div className="flex items-center justify-between w-full">
+            <p>Balance</p>
+            <p>&#8358; {(123455).toLocaleString()}</p>
+          </div>
         </div>
         <div className="w-full">
           <h1>Campaigns</h1>
           <p>Upload tenant details</p>
           <FileInput maxSize={maxSize} onFileChange={handleFileChange} />
         </div>
+      </div>
+
+      <div className="flex justify-end">
+        <Button>Start All</Button>
       </div>
 
       {/* Tenants details table */}
