@@ -15,6 +15,7 @@ import { tenants } from "@/constants/data";
 import Papa from "papaparse";
 import RetellCall from "@/components/RetellCall";
 import Button from "@/components/Button";
+import Link from "next/link";
 
 const Dashboard = () => {
   const [data, setData] = useState([]);
@@ -52,8 +53,8 @@ const Dashboard = () => {
         </div>
       </div>
 
-      <div className="flex justify-end">
-        <Button>Start All</Button>
+      <div className="flex justify-end mt-10">
+        <Button className="!w-auto">Start All</Button>
       </div>
 
       {/* Tenants details table */}
@@ -70,8 +71,13 @@ const Dashboard = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {tenants.map((tenant) => (
-              <TableRow key={tenant.name}>
+            {tenants.map((tenant, index) => (
+              <TableRow
+                key={tenant.name}
+                onClick={() =>
+                  (window.location.href = `/dashboard/tenants/${index + 1}`)
+                }
+              >
                 <TableCell className="font-medium">{tenant.name}</TableCell>
                 <TableCell>{tenant.address}</TableCell>
                 <TableCell>{tenant.phoneNumber}</TableCell>

@@ -3,7 +3,7 @@
 import { navLinks } from "@/constants/route";
 import { LogOutIcon } from "lucide-react";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Auth from "@/utils/auth";
 import { User } from "@/utils/types";
 
@@ -15,9 +15,11 @@ const Header = () => {
     photoURL: "",
   });
 
-  if (typeof window !== "undefined") {
-    setUser(JSON.parse(window.localStorage.getItem("user") || ""));
-  }
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setUser(JSON.parse(window.localStorage.getItem("user") || ""));
+    }
+  }, []);
 
   return (
     <header className="fixed w-full bg-white top-0 flex items-center justify-between py-4 px-10">
