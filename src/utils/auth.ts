@@ -36,19 +36,21 @@ const signInWithGoogle = () => {
 };
 
 const setToken = (token: string) => {
-  localStorage.setItem("token", token);
+  window.localStorage.setItem("token", token);
 };
 
 const setRefreshToken = (token: string) => {
-  localStorage.setItem("refreshToken", token);
+  window.localStorage.setItem("refreshToken", token);
 };
 
 const getToken = () => {
-  return localStorage.getItem("accessToken");
+  if (typeof window !== "undefined") {
+    return window.localStorage.getItem("accessToken");
+  }
 };
 
 const getRefreshToken = () => {
-  return localStorage.getItem("refreshToken");
+  return window.localStorage.getItem("refreshToken");
 };
 
 const getDecodedJwt = () => {
@@ -61,7 +63,7 @@ const getDecodedJwt = () => {
 };
 
 const logOut = () => {
-  localStorage.clear();
+  window.localStorage.clear();
   window.location.replace(LOGIN);
 };
 
