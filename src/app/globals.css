@@ -1,4 +1,29 @@
 @tailwind base;
-  @tailwind components;
-  @tailwind utilities;
-  
+@tailwind components;
+@tailwind utilities;
+
+.link {
+  height: 50px;
+  width: 50px;
+  background: red;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer
+}
+
+.link::after {
+  content: "";
+  height: 80%;
+  background: #fff;
+  width: 5px;
+  position: absolute;
+  top: 10%;
+  left: 10px;
+  border-radius: 20px;
+  transition: all .35s;
+  opacity: 0;
+}
+
+.link:hover::after {
+  opacity: 1
+}

@@ -4,6 +4,7 @@ import Header from "@/components/Header";
 import { LOGIN } from "@/constants/path";
 import React from "react";
 import { useToast } from "@/components/ui/use-toast";
+import Sidebar from "@/components/Sidebar";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const { toast } = useToast();
@@ -26,6 +27,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div>
       <Header />
+      {/* <Sidebar /> */}
       <div className="mt-20 px-20">{children}</div>
     </div>
   );
