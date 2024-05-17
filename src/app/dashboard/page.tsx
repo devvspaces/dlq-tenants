@@ -71,6 +71,12 @@ const Dashboard = () => {
   };
 
   const handleUploadTenant = () => {
+    if (!data.length) {
+      return toast({
+        title: "Please upload tenant details",
+        variant: "destructive",
+      });
+    }
     // @ts-ignore
     mutateUploadTenant(data, {
       onSuccess: (data) => {
@@ -116,7 +122,9 @@ const Dashboard = () => {
           <h1>Campaigns</h1>
           <p>Upload tenant details</p>
           <FileInput maxSize={maxSize} onFileChange={handleFileChange} />
-          <Button onClick={handleUploadTenant}>Upload Tenant</Button>
+          <Button className="my-5" onClick={handleUploadTenant}>
+            Upload Tenant
+          </Button>
         </div>
       </div>
 
@@ -147,8 +155,8 @@ const Dashboard = () => {
                   </TableCell>
                 </TableRow>
               ) : // check if data is present
-              tenants ? (
-                tenants.map((tenant: Tenant) => (
+              tenants.data ? (
+                tenants.data.map((tenant: Tenant) => (
                   <TableRow
                     key={tenant.id}
                     onClick={() =>
