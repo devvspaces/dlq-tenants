@@ -23,6 +23,7 @@ import { useToast } from "@/components/ui/use-toast";
 
 const Dashboard = () => {
   const [data, setData] = useState([]);
+  const [uploadedFile, setUploadedFile] = useState<File>();
   const [isRunningCampaign, setIsRunningCampaign] = useState(false);
 
   const { toast } = useToast();
@@ -71,12 +72,17 @@ const Dashboard = () => {
   };
 
   const handleUploadTenant = () => {
-    if (!data.length) {
+    if (!uploadedFile) {
       return toast({
         title: "Please upload tenant details",
         variant: "destructive",
       });
     }
+
+    // append file to a form
+    const data = new FormData();
+    data.append("tenants", uploadedFile);
+
     // @ts-ignore
     mutateUploadTenant(data, {
       onSuccess: (data) => {
@@ -96,15 +102,16 @@ const Dashboard = () => {
   const maxSize = 2 * 1024 * 1024;
 
   const handleFileChange = (file: File) => {
+    setUploadedFile(file);
     // Extract data from uploaded file
-    Papa.parse(file, {
-      header: true,
-      complete: (results) => {
-        // @ts-ignore
-        setData(results.data);
-        console.log(results.data);
-      },
-    });
+    // Papa.parse(file, {
+    //   header: true,
+    //   complete: (results) => {
+    //     // @ts-ignore
+    //     setData(results.data);
+    //     console.log(results.data);
+    //   },
+    // });
   };
 
   return (
@@ -122,8 +129,12 @@ const Dashboard = () => {
           <h1>Campaigns</h1>
           <p>Upload tenant details</p>
           <FileInput maxSize={maxSize} onFileChange={handleFileChange} />
-          <Button className="my-5" onClick={handleUploadTenant}>
-            Upload Tenant
+          <Button
+            className="my-5"
+            isDisabled={isLoadingUploadTenant}
+            onClick={handleUploadTenant}
+          >
+            {isLoadingUploadTenant ? <Loading /> : "Upload Tenant"}
           </Button>
         </div>
       </div>
@@ -151,12 +162,12 @@ const Dashboard = () => {
               isLoadingTenants ? (
                 <TableRow>
                   <TableCell colSpan={5} className="text-center py-10">
-                    <Loading />
+                    <Loading color="#232555" />
                   </TableCell>
                 </TableRow>
               ) : // check if data is present
-              tenants.data ? (
-                tenants.data.map((tenant: Tenant) => (
+              tenants?.data.length ? (
+                tenants?.data.map((tenant: Tenant) => (
                   <TableRow
                     key={tenant.id}
                     onClick={() =>
