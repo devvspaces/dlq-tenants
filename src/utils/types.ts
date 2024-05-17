@@ -29,3 +29,11 @@ export type User = {
   email: string;
   photoURL: string;
 };
+
+export type AuthResponse = {
+  message: string;
+  data: {
+    token: string;
+  };
+  success: boolean;
+};

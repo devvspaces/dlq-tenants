@@ -27,6 +27,7 @@
     "react-dom": "^18",
     "react-hook-form": "^7.51.4",
     "react-loader-spinner": "^6.1.6",
+    "react-query": "^3.39.3",
     "retell-client-js-sdk": "^1.3.3",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",
