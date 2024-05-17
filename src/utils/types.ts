@@ -1,3 +1,5 @@
+import { string } from "zod";
+
 export type InputPropType = {
   id?: string;
   label?: string;
@@ -36,4 +38,12 @@ export type AuthResponse = {
     token: string;
   };
   success: boolean;
+};
+
+export type Tenant = {
+  id: number;
+  first_name: string;
+  last_name: string;
+  address: string;
+  phone: string;
 };

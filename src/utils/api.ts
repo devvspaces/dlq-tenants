@@ -8,6 +8,7 @@ const Api = axios.create({
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",
+    "x-api-key": Auth.getToken(),
   },
 });
 
