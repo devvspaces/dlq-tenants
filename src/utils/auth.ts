@@ -25,9 +25,7 @@ const signInWithGoogle = () => {
 
             window.localStorage.setItem("user", JSON.stringify(data.user));
 
-            setTimeout(() => {
-              window.location.href = DASHBOARD;
-            }, 2000);
+            window.location.href = DASHBOARD;
           }
         }
       })

@@ -105,12 +105,16 @@ const Dashboard = () => {
     Papa.parse(file, {
       header: true,
       complete: (results) => {
+        const heading = results.meta.fields?.map((res) =>
+          res.toLocaleLowerCase()
+        );
+
         // check if the data has first_name, last_name, phone and address
         if (
-          results.meta.fields?.includes("first_name") &&
-          results.meta.fields?.includes("last_name") &&
-          results.meta.fields?.includes("phone") &&
-          results.meta.fields?.includes("address")
+          heading?.includes("first") &&
+          heading?.includes("last") &&
+          heading?.includes("phone") &&
+          heading?.includes("address")
         ) {
           return setUploadedFile(file);
         } else {
