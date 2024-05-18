@@ -27,7 +27,11 @@ const Dashboard = () => {
 
   const { toast } = useToast();
 
-  const { data: tenants, isLoading: isLoadingTenants } = GetTenantsMutation();
+  const {
+    data: tenants,
+    isLoading: isLoadingTenants,
+    refetch,
+  } = GetTenantsMutation();
   const { mutate, isLoading } = StartCampaignMutation();
   const { mutate: mutateUploadTenant, isLoading: isLoadingUploadTenant } =
     UploadTenantsMutation();
@@ -87,6 +91,9 @@ const Dashboard = () => {
       onSuccess: (data) => {
         console.log(data);
         toast({ title: "Tenant uploaded successfully" });
+
+        // Refetch tenants
+        refetch();
       },
       onError: () =>
         toast({
@@ -105,12 +112,16 @@ const Dashboard = () => {
     Papa.parse(file, {
       header: true,
       complete: (results) => {
+        const heading = results.meta.fields?.map((res) =>
+          res.toLocaleLowerCase()
+        );
+
         // check if the data has first_name, last_name, phone and address
         if (
-          results.meta.fields?.includes("first_name") &&
-          results.meta.fields?.includes("last_name") &&
-          results.meta.fields?.includes("phone") &&
-          results.meta.fields?.includes("address")
+          heading?.some((h) => h.includes("first")) &&
+          heading?.some((h) => h.includes("last")) &&
+          heading?.some((h) => h.includes("phone")) &&
+          heading?.some((h) => h.includes("address"))
         ) {
           return setUploadedFile(file);
         } else {
