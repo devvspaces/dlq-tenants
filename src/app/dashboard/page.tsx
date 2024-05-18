@@ -22,7 +22,6 @@ import { StartCampaignMutation } from "@/services/campaign";
 import { useToast } from "@/components/ui/use-toast";
 
 const Dashboard = () => {
-  const [data, setData] = useState([]);
   const [uploadedFile, setUploadedFile] = useState<File>();
   const [isRunningCampaign, setIsRunningCampaign] = useState(false);
 
@@ -102,16 +101,28 @@ const Dashboard = () => {
   const maxSize = 2 * 1024 * 1024;
 
   const handleFileChange = (file: File) => {
-    setUploadedFile(file);
     // Extract data from uploaded file
-    // Papa.parse(file, {
-    //   header: true,
-    //   complete: (results) => {
-    //     // @ts-ignore
-    //     setData(results.data);
-    //     console.log(results.data);
-    //   },
-    // });
+    Papa.parse(file, {
+      header: true,
+      complete: (results) => {
+        // check if the data has first_name, last_name, phone and address
+        if (
+          results.meta.fields?.includes("first_name") &&
+          results.meta.fields?.includes("last_name") &&
+          results.meta.fields?.includes("phone") &&
+          results.meta.fields?.includes("address")
+        ) {
+          return setUploadedFile(file);
+        } else {
+          return toast({
+            title: "Error",
+            description:
+              "File should contain first name, last name, phone and address fields",
+            variant: "destructive",
+          });
+        }
+      },
+    });
   };
 
   return (
