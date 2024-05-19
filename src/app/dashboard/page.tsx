@@ -138,7 +138,7 @@ const Dashboard = () => {
 
   return (
     <div>
-      <div className="flex gap-10">
+      <div className="flex flex-col md:flex-row gap-10">
         <div className="w-full">
           <h1>Overview</h1>
 
