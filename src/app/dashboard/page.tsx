@@ -190,20 +190,37 @@ const Dashboard = () => {
               ) : // check if data is present
               tenants?.data.length ? (
                 tenants?.data.map((tenant: Tenant) => (
-                  <TableRow
-                    key={tenant.id}
-                    onClick={() =>
-                      (window.location.href = `/dashboard/tenants/${tenant.id}`)
-                    }
-                  >
-                    <TableCell className="font-medium">
+                  <TableRow key={tenant.id}>
+                    <TableCell
+                      onClick={() =>
+                        (window.location.href = `/dashboard/tenants/${tenant.id}`)
+                      }
+                      className="font-medium"
+                    >
                       {tenant.first_name}
                     </TableCell>
-                    <TableCell className="font-medium">
+                    <TableCell
+                      onClick={() =>
+                        (window.location.href = `/dashboard/tenants/${tenant.id}`)
+                      }
+                      className="font-medium"
+                    >
                       {tenant.last_name}
                     </TableCell>
-                    <TableCell>{tenant.address}</TableCell>
-                    <TableCell>{tenant.phone}</TableCell>
+                    <TableCell
+                      onClick={() =>
+                        (window.location.href = `/dashboard/tenants/${tenant.id}`)
+                      }
+                    >
+                      {tenant.address}
+                    </TableCell>
+                    <TableCell
+                      onClick={() =>
+                        (window.location.href = `/dashboard/tenants/${tenant.id}`)
+                      }
+                    >
+                      {tenant.phone}
+                    </TableCell>
                     <TableCell className="">
                       {/* <RetellCall /> */}
                       {isRunningCampaign ? (
