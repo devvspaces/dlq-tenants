@@ -9,6 +9,6 @@ export const StartCampaignMutation = () => {
 
 export const EndCampaignMutation = () => {
   return useMutation((data) => {
-    return Api.post("campaigns/start", data);
+    return Api.post("campaigns/end", data);
   });
 };

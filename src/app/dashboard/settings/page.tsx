@@ -1,3 +1,5 @@
+"use client";
+
 import Button from "@/components/Button";
 import ChangeAIPromptModal from "@/components/modals/AIPrompts";
 import SelectGSModal from "@/components/modals/SelectGS";

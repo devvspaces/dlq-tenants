@@ -222,8 +222,8 @@ const Dashboard = () => {
                       {tenant.phone}
                     </TableCell>
                     <TableCell className="">
-                      {/* <RetellCall /> */}
-                      {isRunningCampaign ? (
+                      <RetellCall />
+                      {/* {isRunningCampaign ? (
                         <Button
                           className="bg-red-800"
                           onClick={handleEndCampaign}
@@ -238,7 +238,7 @@ const Dashboard = () => {
                         >
                           Start
                         </Button>
-                      )}
+                      )} */}
                     </TableCell>
                   </TableRow>
                 ))

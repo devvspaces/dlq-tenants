@@ -1,10 +1,12 @@
 "use client";
 
+import Auth from "@/utils/auth";
 import { RegisterCallResponse } from "@/utils/types";
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { RetellWebClient } from "retell-client-js-sdk";
 
-const agentId = "1981c52062fd3df0537fbb93585e6afb";
+const agent_id = "8cf2247473195b9c0c589b50d4e56192";
 
 const webClient = new RetellWebClient();
 
@@ -42,7 +44,7 @@ const RetellCall = () => {
     if (isCalling) {
       webClient.stopConversation();
     } else {
-      const registerCallResponse = await registerCall(agentId);
+      const registerCallResponse = await registerCall(agent_id);
 
       if (registerCallResponse.callId) {
         webClient
@@ -58,27 +60,29 @@ const RetellCall = () => {
     }
   };
 
-  async function registerCall(agentId: string): Promise<RegisterCallResponse> {
+  async function registerCall(agent_id: string): Promise<RegisterCallResponse> {
     try {
       // Replace with your server url
-      const response = await fetch(
-        "https://api.retellai.com/retell-llm-new/f13ed01038718c1814253df8aebbaa2e",
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}campaigns/start`,
+        { agent_id },
         {
-          method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Accept: "application/json",
+            "x-api-key": Auth.getToken(),
           },
-          body: JSON.stringify({
-            agentId: agentId,
-          }),
         }
       );
 
-      if (!response.ok) {
+      console.log(response);
+
+      if (!response.data) {
         throw new Error(`Error: ${response.status}`);
       }
 
-      const data: RegisterCallResponse = await response.json();
+      const data: RegisterCallResponse = await response.data;
+      console.log(data, response.data);
       return data;
     } catch (err: unknown) {
       console.log(err);
