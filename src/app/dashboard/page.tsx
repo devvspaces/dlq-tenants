@@ -191,35 +191,25 @@ const Dashboard = () => {
               tenants?.data.length ? (
                 tenants?.data.map((tenant: Tenant) => (
                   <TableRow key={tenant.id}>
-                    <TableCell
-                      onClick={() =>
-                        (window.location.href = `/dashboard/tenants/${tenant.id}`)
-                      }
-                      className="font-medium"
-                    >
-                      {tenant.first_name}
+                    <TableCell className="font-medium">
+                      <Link href={`/dashboard/tenants/${tenant.id}`}>
+                        {tenant.first_name}
+                      </Link>
                     </TableCell>
-                    <TableCell
-                      onClick={() =>
-                        (window.location.href = `/dashboard/tenants/${tenant.id}`)
-                      }
-                      className="font-medium"
-                    >
-                      {tenant.last_name}
+                    <TableCell className="font-medium">
+                      <Link href={`/dashboard/tenants/${tenant.id}`}>
+                        {tenant.last_name}
+                      </Link>
                     </TableCell>
-                    <TableCell
-                      onClick={() =>
-                        (window.location.href = `/dashboard/tenants/${tenant.id}`)
-                      }
-                    >
-                      {tenant.address}
+                    <TableCell>
+                      <Link href={`/dashboard/tenants/${tenant.id}`}>
+                        {tenant.address}
+                      </Link>
                     </TableCell>
-                    <TableCell
-                      onClick={() =>
-                        (window.location.href = `/dashboard/tenants/${tenant.id}`)
-                      }
-                    >
-                      {tenant.phone}
+                    <TableCell>
+                      <Link href={`/dashboard/tenants/${tenant.id}`}>
+                        {tenant.phone}
+                      </Link>
                     </TableCell>
                     <TableCell className="">
                       <RetellCall />
