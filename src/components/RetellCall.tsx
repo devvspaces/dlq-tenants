@@ -5,6 +5,7 @@ import { RegisterCallResponse } from "@/utils/types";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { RetellWebClient } from "retell-client-js-sdk";
+import { useToast } from "@/components/ui/use-toast";
 
 const agent_id = "8cf2247473195b9c0c589b50d4e56192";
 
@@ -12,6 +13,8 @@ const webClient = new RetellWebClient();
 
 const RetellCall = () => {
   const [isCalling, setIsCalling] = useState(false);
+
+  const { toast } = useToast();
 
   // Initialize the SDK
   useEffect(() => {
@@ -84,8 +87,13 @@ const RetellCall = () => {
       const data: RegisterCallResponse = await response.data;
       console.log(data, response.data);
       return data;
-    } catch (err: unknown) {
+    } catch (err: any) {
       console.log(err);
+      toast({
+        title: "Error",
+        description: err.response.data.message,
+        variant: "destructive",
+      });
       if (typeof err === "string" || err instanceof Error) {
         throw new Error(`Caught error: ${err}`);
       } else {
