@@ -20,12 +20,14 @@ import { Tenant } from "@/utils/types";
 import Loading from "@/components/Loading";
 import { StartCampaignMutation } from "@/services/campaign";
 import { useToast } from "@/components/ui/use-toast";
+import { useRouter } from "next/navigation";
 
 const Dashboard = () => {
   const [uploadedFile, setUploadedFile] = useState<File>();
   const [isRunningCampaign, setIsRunningCampaign] = useState(false);
 
   const { toast } = useToast();
+  const router = useRouter();
 
   const {
     data: tenants,
@@ -102,6 +104,10 @@ const Dashboard = () => {
           variant: "destructive",
         }),
     });
+  };
+
+  const handleSingleTenant = (id: number) => {
+    router.push(`/dashboard/tenants/${id}`);
   };
 
   //   maximum file size that can be uploaded
@@ -191,25 +197,23 @@ const Dashboard = () => {
               tenants?.data.length ? (
                 tenants?.data.map((tenant: Tenant) => (
                   <TableRow key={tenant.id}>
-                    <TableCell className="font-medium">
-                      <Link href={`/dashboard/tenants/${tenant.id}`}>
-                        {tenant.first_name}
-                      </Link>
+                    <TableCell
+                      className="font-medium"
+                      onClick={() => handleSingleTenant(tenant.id)}
+                    >
+                      {tenant.first_name}
                     </TableCell>
-                    <TableCell className="font-medium">
-                      <Link href={`/dashboard/tenants/${tenant.id}`}>
-                        {tenant.last_name}
-                      </Link>
+                    <TableCell
+                      className="font-medium"
+                      onClick={() => handleSingleTenant(tenant.id)}
+                    >
+                      {tenant.last_name}
                     </TableCell>
-                    <TableCell>
-                      <Link href={`/dashboard/tenants/${tenant.id}`}>
-                        {tenant.address}
-                      </Link>
+                    <TableCell onClick={() => handleSingleTenant(tenant.id)}>
+                      {tenant.address}
                     </TableCell>
-                    <TableCell>
-                      <Link href={`/dashboard/tenants/${tenant.id}`}>
-                        {tenant.phone}
-                      </Link>
+                    <TableCell onClick={() => handleSingleTenant(tenant.id)}>
+                      {tenant.phone}
                     </TableCell>
                     <TableCell className="">
                       <RetellCall />
