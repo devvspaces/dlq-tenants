@@ -24,7 +24,6 @@ import { useRouter } from "next/navigation";
 
 const Dashboard = () => {
   const [uploadedFile, setUploadedFile] = useState<File>();
-  const [isRunningCampaign, setIsRunningCampaign] = useState(false);
 
   const { toast } = useToast();
   const router = useRouter();
@@ -47,7 +46,6 @@ const Dashboard = () => {
     mutate(values, {
       onSuccess: (data) => {
         console.log(data);
-        setIsRunningCampaign(true);
         toast({ title: "Campaign started successfully" });
       },
       onError: () =>
@@ -64,7 +62,6 @@ const Dashboard = () => {
     mutate(null, {
       onSuccess: (data) => {
         console.log(data);
-        setIsRunningCampaign(false);
         toast({ title: "Campaign stopped successfully" });
       },
       onError: () =>
@@ -127,7 +124,13 @@ const Dashboard = () => {
           heading?.some((h) => h.includes("first")) &&
           heading?.some((h) => h.includes("last")) &&
           heading?.some((h) => h.includes("phone")) &&
-          heading?.some((h) => h.includes("address"))
+          heading?.some((h) => h.includes("address")) &&
+          heading?.some((h) => h.includes("start date")) &&
+          heading?.some((h) => h.includes("due date")) &&
+          heading?.some((h) => h.includes("amount")) &&
+          heading?.some((h) => h.includes("amount paid")) &&
+          heading?.some((h) => h.includes("outstanding")) &&
+          heading?.some((h) => h.includes("year"))
         ) {
           return setUploadedFile(file);
         } else {
@@ -198,25 +201,31 @@ const Dashboard = () => {
                 tenants?.data.map((tenant: Tenant) => (
                   <TableRow key={tenant.id}>
                     <TableCell
-                      className="font-medium"
+                      className="font-medium cursor-pointer"
                       onClick={() => handleSingleTenant(tenant.id)}
                     >
                       {tenant.first_name}
                     </TableCell>
                     <TableCell
-                      className="font-medium"
+                      className="font-medium cursor-pointer"
                       onClick={() => handleSingleTenant(tenant.id)}
                     >
                       {tenant.last_name}
                     </TableCell>
-                    <TableCell onClick={() => handleSingleTenant(tenant.id)}>
+                    <TableCell
+                      className="cursor-pointer"
+                      onClick={() => handleSingleTenant(tenant.id)}
+                    >
                       {tenant.address}
                     </TableCell>
-                    <TableCell onClick={() => handleSingleTenant(tenant.id)}>
+                    <TableCell
+                      className="cursor-pointer"
+                      onClick={() => handleSingleTenant(tenant.id)}
+                    >
                       {tenant.phone}
                     </TableCell>
                     <TableCell className="">
-                      <RetellCall />
+                      <RetellCall id={tenant.id} />
                       {/* {isRunningCampaign ? (
                         <Button
                           className="bg-red-800"

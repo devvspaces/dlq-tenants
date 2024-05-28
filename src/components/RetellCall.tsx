@@ -11,7 +11,7 @@ const agent_id = "8cf2247473195b9c0c589b50d4e56192";
 
 const webClient = new RetellWebClient();
 
-const RetellCall = () => {
+const RetellCall = ({ id }: { id: number }) => {
   const [isCalling, setIsCalling] = useState(false);
 
   const { toast } = useToast();
@@ -65,10 +65,14 @@ const RetellCall = () => {
 
   async function registerCall(agent_id: string): Promise<RegisterCallResponse> {
     try {
-      // Replace with your server url
+      const reqData = {
+        agent_id,
+        tenant_id: id,
+      };
+
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}campaigns/start`,
-        { agent_id },
+        reqData,
         {
           headers: {
             "Content-Type": "application/json",
@@ -85,7 +89,7 @@ const RetellCall = () => {
       }
 
       const data: RegisterCallResponse = await response.data;
-      console.log(data, response.data);
+      setIsCalling(true);
       return data;
     } catch (err: any) {
       console.log(err);
