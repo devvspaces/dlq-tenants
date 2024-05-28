@@ -1,5 +1,5 @@
 import { jwtDecode } from "jwt-decode";
-import { signInWithPopup } from "firebase/auth";
+import { signInWithPopup, getIdToken } from "firebase/auth";
 import { auth, provider } from "@/lib/firebase";
 import { LOGIN, DASHBOARD } from "@/constants/path";
 import axios from "axios";
@@ -30,6 +30,17 @@ const signInWithGoogle = () => {
         }
       })
       .catch((error: Error) => console.log(error));
+  });
+};
+
+export const fetchTenantsData = async () => {
+  return fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}user/tenants`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "x-api-key":
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImRhbWlsYXJldG9sdWxvcGUxQGdtYWlsLmNvbSIsImlkIjoxLCJpYXQiOjE3MTY4ODM4NDJ9.FJjvrpGKIAh_ZATiKISG1UJi2LDyYF81gKXdP7CkGQc",
+    },
   });
 };
 
