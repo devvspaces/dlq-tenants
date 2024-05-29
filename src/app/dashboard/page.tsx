@@ -137,7 +137,7 @@ const Dashboard = () => {
           return toast({
             title: "Error",
             description:
-              "File should contain first name, last name, phone and address fields",
+              "File should contain first name, last name, phone, address, amount, amount paid, outstanding balance, year, start date and due date fields",
             variant: "destructive",
           });
         }
