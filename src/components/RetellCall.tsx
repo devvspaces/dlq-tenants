@@ -43,26 +43,26 @@ const RetellCall = ({ id }: { id: number }) => {
     });
   }, []);
 
-  const toggleConversation = async () => {
-    if (isCalling) {
-      webClient.stopConversation();
+  const startCall = async () => {
+    const registerCallResponse = await registerCall(agent_id);
 
-      setIsCalling(false);
-    } else {
-      const registerCallResponse = await registerCall(agent_id);
+    if (registerCallResponse.callId) {
+      webClient
+        .startConversation({
+          callId: registerCallResponse.callId,
+          sampleRate: registerCallResponse.sampleRate,
+          enableUpdate: true,
+        })
+        .catch(console.error);
 
-      if (registerCallResponse.callId) {
-        webClient
-          .startConversation({
-            callId: registerCallResponse.callId,
-            sampleRate: registerCallResponse.sampleRate,
-            enableUpdate: true,
-          })
-          .catch(console.error);
-
-        setIsCalling(true);
-      }
+      setIsCalling(true);
     }
+  };
+
+  const endCall = async () => {
+    webClient.stopConversation();
+
+    setIsCalling(false);
   };
 
   async function registerCall(agent_id: string): Promise<RegisterCallResponse> {
@@ -113,16 +113,21 @@ const RetellCall = ({ id }: { id: number }) => {
 
   return (
     <div className="">
-      <header className="App-header">
+      {isCalling ? (
         <button
-          className={`px-8 py-2 rounded-lg text-sm cursor-pointer text-white ${
-            isCalling ? "bg-[red]" : "bg-green-600"
-          }`}
-          onClick={toggleConversation}
+          className={`px-8 py-2 rounded-lg text-sm cursor-pointer text-white bg-[red] `}
+          onClick={endCall}
         >
-          {isCalling ? "Stop" : "Start"}
+          Stop
         </button>
-      </header>
+      ) : (
+        <button
+          className={`px-8 py-2 rounded-lg text-sm cursor-pointer text-white bg-green-600`}
+          onClick={startCall}
+        >
+          Start
+        </button>
+      )}
     </div>
   );
 };
