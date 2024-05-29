@@ -46,6 +46,8 @@ const RetellCall = ({ id }: { id: number }) => {
   const toggleConversation = async () => {
     if (isCalling) {
       webClient.stopConversation();
+
+      setIsCalling(false);
     } else {
       const registerCallResponse = await registerCall(agent_id);
 
@@ -82,17 +84,20 @@ const RetellCall = ({ id }: { id: number }) => {
         }
       );
 
-      console.log(response);
-
       if (!response.data) {
         throw new Error(`Error: ${response.status}`);
       }
 
+      toast({
+        title: response.data?.message,
+      });
+
       const data: RegisterCallResponse = await response.data;
+
       setIsCalling(true);
+
       return data;
     } catch (err: any) {
-      console.log(err);
       toast({
         title: "Error",
         description: err.response.data.message,

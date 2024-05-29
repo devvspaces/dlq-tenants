@@ -4,6 +4,7 @@ import { auth, provider } from "@/lib/firebase";
 import { LOGIN, DASHBOARD } from "@/constants/path";
 import axios from "axios";
 import { AuthResponse } from "./types";
+import { setCookie } from "cookies-next";
 
 // SignIn with google
 const signInWithGoogle = () => {
@@ -20,6 +21,9 @@ const signInWithGoogle = () => {
         const { data: responseData, success } = res.data as AuthResponse;
 
         if (success) {
+          // set token in cookie
+          setCookie("token", responseData.token);
+
           if (typeof window !== "undefined") {
             window.localStorage.setItem("accessToken", responseData.token);
 

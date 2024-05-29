@@ -22,7 +22,7 @@ const Header = () => {
   }, []);
 
   return (
-    <header className="fixed w-full bg-white top-0 flex items-center justify-between py-4 px-10">
+    <header className="fixed z-40 w-full bg-white top-0 flex items-center justify-between py-4 px-10">
       <h1 className="font-bold text-2xl">Hi, {user.displayName}</h1>
 
       <nav className="flex gap-5 items-center">
