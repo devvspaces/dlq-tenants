@@ -8,26 +8,40 @@ import { GetCampaignsQuery, GetACampaignQuery } from "@/services/campaign";
 import { SingleCampaign, Tenant } from "@/utils/types";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import { useQuery } from "react-query";
 
 const TenantDetails = ({ id }: { id: string }) => {
   const [convoIndex, setConvoIndex] = useState(0);
-  const [conversation, setConversation] = useState<SingleCampaign>();
-  const [isLoadingConversation, setIsLoadingConversation] = useState<boolean>();
 
   const { data: tenants, isLoading: isLoadingTenants } = GetTenantsMutation();
   const { data: campaigns, isLoading: isLoadingCampaigns } =
     GetCampaignsQuery(id);
 
-  useEffect(() => {
-    if (campaigns.data.length && convoIndex) {
-      const { data, isLoading } = GetCampaignsQuery(
-        campaigns.data[convoIndex]?.id
-      );
+  const {
+    data: conversation,
+    isLoading: isLoadingConversation,
+    refetch,
+  } = useQuery(
+    ["conversation", campaigns.data[convoIndex]?.id],
+    () => GetACampaignQuery(campaigns.data[convoIndex]?.id),
+    { enabled: campaigns.data[convoIndex] }
+  );
 
-      setConversation(data.data);
-      setIsLoadingConversation(isLoading);
-    }
-  }, [convoIndex]);
+  // useEffect(() => {
+  //   if (!isLoadingCampaigns && campaigns.data.length && convoIndex > -1) {
+  //     const { data, isLoading } = GetCampaignsQuery(
+  //       campaigns.data[convoIndex]?.id
+  //     );
+  //     console.log(data);
+  //     setConversation(data.data);
+  //     setIsLoadingConversation(isLoading);
+  //   }
+  // }, [convoIndex, isLoadingCampaigns]);
+
+  const handleChangeConvo = (value: number) => {
+    setConvoIndex(value);
+    refetch();
+  };
 
   const tenant = tenants?.data.find(
     (tenant: Tenant) => tenant.id === parseInt(id)
@@ -64,7 +78,11 @@ const TenantDetails = ({ id }: { id: string }) => {
       </div>
       <div className="mt-5">
         <p className="font-bold">Summary</p>
-        <p>{campaigns.data[convoIndex]?.conversation.summary}</p>
+        <p>
+          {campaigns?.data[convoIndex]
+            ? campaigns.data[convoIndex]?.conversation.summary
+            : "-"}
+        </p>
       </div>
       <div className="mt-5">
         <div className="flex items-center justify-between">
@@ -80,15 +98,22 @@ const TenantDetails = ({ id }: { id: string }) => {
               </option>
             ) : (
               campaigns.data.map((campaign: any, index: number) => (
-                <option value={index}>Convo {index}</option>
+                <>
+                  <option hidden selected defaultChecked>
+                    Select Convo
+                  </option>
+                  <option value={index}>Convo {index + 1}</option>
+                </>
               ))
             )}
           </select>
         </div>
 
         <div className="pb-20">
-          {conversation?.id ? (
-            conversation?.conversation?.transcript.map(
+          {isLoadingConversation ? (
+            <Loading color="#000" />
+          ) : conversation?.data?.id ? (
+            conversation?.data?.conversation?.transcript.map(
               (convo: { role: string; content: string }, index: number) => {
                 return (
                   <p key={index} className="mt-3">

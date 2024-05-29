@@ -26,3 +26,5 @@ export const GetACampaignQuery = (id: string) => {
     return Api.get(`campaigns/detail/${id}`).then((res) => res.data);
   });
 };
+
+

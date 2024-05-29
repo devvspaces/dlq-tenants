@@ -13,6 +13,8 @@ const webClient = new RetellWebClient();
 const RetellCall = ({ id }: { id: number }) => {
   const [isCalling, setIsCalling] = useState(false);
 
+  const { data: userData, isLoading } = GetUserProfile();
+
   const { toast } = useToast();
 
   // Initialize the SDK
@@ -43,22 +45,22 @@ const RetellCall = ({ id }: { id: number }) => {
   }, []);
 
   const startCall = async () => {
-    const { data: userData } = await GetUserProfile();
+    if (!isLoading) {
+      const agent_id = userData.data.agent_id;
 
-    const agent_id = userData.data.agent_id;
+      const registerCallResponse = await registerCall(agent_id);
 
-    const registerCallResponse = await registerCall(agent_id);
+      if (registerCallResponse.callId) {
+        webClient
+          .startConversation({
+            callId: registerCallResponse.callId,
+            sampleRate: registerCallResponse.sampleRate,
+            enableUpdate: true,
+          })
+          .catch(console.error);
 
-    if (registerCallResponse.callId) {
-      webClient
-        .startConversation({
-          callId: registerCallResponse.callId,
-          sampleRate: registerCallResponse.sampleRate,
-          enableUpdate: true,
-        })
-        .catch(console.error);
-
-      setIsCalling(true);
+        setIsCalling(true);
+      }
     }
   };
 

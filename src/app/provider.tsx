@@ -13,6 +13,7 @@ const Providers = ({ children }: { children: React.ReactNode }) => {
         refetchOnReconnect: false,
         retry: false,
         staleTime: 1000 * 60 * 60 * 24,
+        cacheTime: 0,
       },
     },
   });
