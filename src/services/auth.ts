@@ -1,4 +1,4 @@
-import { useMutation } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import Api from "@/utils/api";
 
 export const LoginApiMutation = () => {
@@ -16,5 +16,12 @@ export const RegisterApiMutation = () => {
 export const GoogleAuth = () => {
   return useMutation((data) => {
     return Api.post("auth/google", data);
+  });
+};
+
+//User Profile
+export const GetUserProfile = () => {
+  return useQuery("profile", () => {
+    return Api.get(`user`).then((res) => res.data);
   });
 };

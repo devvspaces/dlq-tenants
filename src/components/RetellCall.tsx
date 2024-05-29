@@ -6,8 +6,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { RetellWebClient } from "retell-client-js-sdk";
 import { useToast } from "@/components/ui/use-toast";
-
-const agent_id = "8cf2247473195b9c0c589b50d4e56192";
+import { GetUserProfile } from "@/services/auth";
 
 const webClient = new RetellWebClient();
 
@@ -44,6 +43,10 @@ const RetellCall = ({ id }: { id: number }) => {
   }, []);
 
   const startCall = async () => {
+    const { data: userData } = await GetUserProfile();
+
+    const agent_id = userData.data.agent_id;
+
     const registerCallResponse = await registerCall(agent_id);
 
     if (registerCallResponse.callId) {
