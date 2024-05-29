@@ -1,47 +1,31 @@
 "use client";
 
 import Loading from "@/components/Loading";
-import { conversation, convoData } from "@/constants/data";
 import { DASHBOARD } from "@/constants/path";
 import { GetTenantsMutation } from "@/services/tenants";
-import { GetCampaignsQuery, GetACampaignQuery } from "@/services/campaign";
-import { SingleCampaign, Tenant } from "@/utils/types";
+import { GetCampaignsQuery } from "@/services/campaign";
+import { Tenant } from "@/utils/types";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useQuery } from "react-query";
+import Api from "@/utils/api";
+import { AxiosResponse } from "axios";
 
 const TenantDetails = ({ id }: { id: string }) => {
-  const [convoIndex, setConvoIndex] = useState(0);
+  const [convoIndex, setConvoIndex] = useState(-1);
 
   const { data: tenants, isLoading: isLoadingTenants } = GetTenantsMutation();
   const { data: campaigns, isLoading: isLoadingCampaigns } =
     GetCampaignsQuery(id);
 
-  const {
-    data: conversation,
-    isLoading: isLoadingConversation,
-    refetch,
-  } = useQuery(
+  const { data: conversation, isLoading: isLoadingConversation } = useQuery(
     ["conversation", campaigns?.data[convoIndex]?.id],
-    () => GetACampaignQuery(campaigns?.data[convoIndex]?.id),
-    { enabled: campaigns?.data.length > 0 }
+    () =>
+      Api.get(`campaigns/detail/${campaigns?.data[convoIndex]?.id}`).then(
+        (res: AxiosResponse) => res.data
+      ),
+    { enabled: convoIndex > -1 }
   );
-
-  // useEffect(() => {
-  //   if (!isLoadingCampaigns && campaigns.data.length && convoIndex > -1) {
-  //     const { data, isLoading } = GetCampaignsQuery(
-  //       campaigns.data[convoIndex]?.id
-  //     );
-  //     console.log(data);
-  //     setConversation(data.data);
-  //     setIsLoadingConversation(isLoading);
-  //   }
-  // }, [convoIndex, isLoadingCampaigns]);
-
-  const handleChangeConvo = (value: number) => {
-    setConvoIndex(value);
-    refetch();
-  };
 
   const tenant = tenants?.data.find(
     (tenant: Tenant) => tenant.id === parseInt(id)
