@@ -80,24 +80,26 @@ const TenantDetails = ({ id }: { id: string }) => {
       <div className="mt-5">
         <div className="flex items-center justify-between">
           <p className="font-bold">Transcript</p>
-          <select onChange={(e) => setConvoIndex(parseInt(e.target.value))}>
+          <select defaultValue={'z'} onChange={(e) => setConvoIndex(parseInt(e.target.value))}>
             {isLoadingCampaigns ? (
-              <option hidden selected defaultChecked>
+              <option hidden  value={'z'} defaultChecked>
                 Loading...
               </option>
             ) : !campaigns.data.length ? (
-              <option hidden selected defaultChecked>
+              <option hidden  value={'z'} defaultChecked>
                 No convo yet
               </option>
             ) : (
-              campaigns.data.map((campaign: any, index: number) => (
                 <>
-                  <option hidden selected defaultChecked>
+                <option value={'z'} hidden defaultChecked>
                     Select Convo
-                  </option>
-                  <option value={index}>Convo {index + 1}</option>
-                </>
-              ))
+                </option>
+                {
+                  campaigns.data.map((campaign: any, index: number) => (
+                    <option value={index} key={index}>Convo {index + 1}</option>
+                  ))
+                }
+              </>
             )}
           </select>
         </div>
