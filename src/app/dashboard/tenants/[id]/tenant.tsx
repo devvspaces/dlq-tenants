@@ -10,6 +10,7 @@ import React, { useState } from "react";
 import { useQuery } from "react-query";
 import Api from "@/utils/api";
 import { AxiosResponse } from "axios";
+import moment from "moment";
 
 const TenantDetails = ({ id }: { id: string }) => {
   const [convoIndex, setConvoIndex] = useState(-1);
@@ -65,6 +66,14 @@ const TenantDetails = ({ id }: { id: string }) => {
         <p>
           {campaigns?.data[convoIndex]
             ? campaigns.data[convoIndex]?.conversation.summary
+            : "-"}
+        </p>
+      </div>
+      <div className="mt-5">
+        <p className="font-bold">Next call</p>
+        <p>
+          {campaigns?.data[convoIndex]
+            ? moment(campaigns.data[convoIndex]?.next_call).format("Do MMM, YYYY - hh:mm A (dddd)")
             : "-"}
         </p>
       </div>
