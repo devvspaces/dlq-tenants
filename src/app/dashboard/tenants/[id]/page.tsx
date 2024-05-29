@@ -14,8 +14,6 @@ const getToken = () => {
 };
 
 export async function generateStaticParams() {
-  getToken();
-
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_API_BASE_URL}user/tenants`,
     {

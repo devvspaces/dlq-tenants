@@ -37,6 +37,14 @@ const TenantDetails = ({ id }: { id: string }) => {
         </p>
       </div>
       <div className="mt-5">
+        <p className="font-bold">Amount</p>
+        <p>{tenant?.amount}</p>
+      </div>
+      <div className="mt-5">
+        <p className="font-bold">Amount Paid</p>
+        <p>{tenant?.amount_paid}</p>
+      </div>
+      <div className="mt-5">
         <p className="font-bold">Phone Number</p>
         <p>{tenant?.phone}</p>
       </div>
