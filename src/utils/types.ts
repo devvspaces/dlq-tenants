@@ -15,7 +15,7 @@ export type ButtonProps = {
   onClick?: () => void;
   children: string | React.ReactNode;
   className?: string;
-  type?: "button" | "reset" | "submit";
+  type?: string;
   isSecondary?: boolean;
   isDisabled?: boolean;
 };
@@ -46,4 +46,84 @@ export type Tenant = {
   last_name: string;
   address: string;
   phone: string;
+};
+
+export type Campaigns = {
+  id: number;
+  payment_status: string;
+  commitment_status: null;
+  next_call: string;
+  tenant_id: number;
+  user_id: number;
+  conversation_id: 2;
+  tenant: {
+    first_name: string;
+    last_name: string;
+    address: string;
+    phone: string;
+  };
+  conversation: {
+    summary: string;
+  };
+};
+
+export type SingleCampaign = {
+  id: number;
+  payment_status: string;
+  commitment_status: null;
+  next_call: string;
+  tenant_id: number;
+  user_id: number;
+  conversation_id: number;
+  conversation: {
+    id: 2;
+    date: string;
+    summary: string;
+    transcript: [
+      {
+        role: string;
+        content: string;
+      },
+      {
+        role: string;
+        content: string;
+      },
+      {
+        role: string;
+        content: string;
+      },
+      {
+        role: string;
+        content: string;
+      },
+      {
+        role: string;
+        content: string;
+      },
+      {
+        role: string;
+        content: string;
+      },
+      {
+        role: string;
+        content: string;
+      }
+    ];
+  };
+  tenant: {
+    id: number;
+    first_name: string;
+    last_name: string;
+    address: string;
+    phone: string;
+    amount: string;
+    amount_paid: string;
+    outstanding_balance: string;
+    start_date: string;
+    due_date: string;
+    commitment_date: null;
+    current_year: number;
+    history: {};
+    user_id: number;
+  };
 };

@@ -12,3 +12,17 @@ export const EndCampaignMutation = () => {
     return Api.post("campaigns/end", data);
   });
 };
+
+//campaigns/tenant id
+export const GetCampaignsQuery = (id: string) => {
+  return useQuery("campaigns", () => {
+    return Api.get(`campaigns/${id}`).then((res) => res.data);
+  });
+};
+
+//campaigns/detail/campaign id
+export const GetACampaignQuery = (id: string) => {
+  return useQuery("campaigns", () => {
+    return Api.get(`campaigns/detail/${id}`).then((res) => res.data);
+  });
+};

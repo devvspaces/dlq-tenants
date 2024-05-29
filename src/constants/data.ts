@@ -36,6 +36,68 @@ export const tenants = [
   },
 ];
 
+export const campaigns = {
+  data: [
+    {
+      id: 1,
+      payment_status: "UNPAID",
+      commitment_status: null,
+      next_call: "2023-10-11T00:00:00.000Z",
+      tenant_id: 1,
+      user_id: 1,
+      conversation_id: 2,
+      tenant: {
+        first_name: "John",
+        last_name: "Dooe",
+        address: "Cambridge",
+        phone: "+2349056146543",
+      },
+      conversation: {
+        summary:
+          "The AI voice bot called the user to discuss their rent balance for May, confirmed the outstanding balance of $1000, and scheduled a follow-up call for Wednesday to confirm the payment.",
+      },
+    },
+    {
+      id: 2,
+      payment_status: "PAID",
+      commitment_status: null,
+      next_call: "2023-10-11T00:00:00.000Z",
+      tenant_id: 1,
+      user_id: 1,
+      conversation_id: 2,
+      tenant: {
+        first_name: "Dele",
+        last_name: "Peace",
+        address: "Cambridge",
+        phone: "+2349056146543",
+      },
+      conversation: {
+        summary:
+          "Dammy voice bot called the user to discuss their rent balance for May, confirmed the outstanding balance of $1000, and scheduled a follow-up call for Wednesday to confirm the payment.",
+      },
+    },
+    {
+      id: 3,
+      payment_status: "PAID",
+      commitment_status: null,
+      next_call: "2023-10-11T00:00:00.000Z",
+      tenant_id: 1,
+      user_id: 1,
+      conversation_id: 2,
+      tenant: {
+        first_name: "Joshua",
+        last_name: "Olu",
+        address: "Cambridge",
+        phone: "+2349056146543",
+      },
+      conversation: {
+        summary:
+          "Emmy voice bot called the user to discuss their rent balance for May, confirmed the outstanding balance of $1000, and scheduled a follow-up call for Wednesday to confirm the payment.",
+      },
+    },
+  ],
+};
+
 export const conversation = [
   {
     speaker: "USER",
@@ -69,6 +131,72 @@ export const conversation = [
       "You're welcome, John. We appreciate your cooperation. If you have any other questions or concerns, feel free to reach out. Have a great day.",
   },
 ];
+
+export const convoData = {
+  id: 1,
+  payment_status: "UNPAID",
+  commitment_status: null,
+  next_call: "2023-10-11T00:00:00.000Z",
+  tenant_id: 1,
+  user_id: 1,
+  conversation_id: 2,
+  conversation: {
+    id: 2,
+    date: "2024-05-29T09:52:58.830Z",
+    summary:
+      "The AI voice bot called the user to discuss their rent balance for May, confirmed the outstanding balance of $1000, and scheduled a follow-up call for Wednesday to confirm the payment.",
+    transcript: [
+      {
+        role: "agent",
+        content:
+          "Hi, this is NetrobeWeb PyUniverse calling about your rent balance for the month of May. Can we discuss your payment?",
+      },
+      {
+        role: "user",
+        content: "Yes. You can discuss my payment.",
+      },
+      {
+        role: "agent",
+        content:
+          "Let's check your outstanding balance for May.Your outstanding balance for May is $1000. When can you commit to making the payment?",
+      },
+      {
+        role: "user",
+        content: "Message Wednesday.",
+      },
+      {
+        role: "agent",
+        content:
+          "Great! You mentioned Wednesday. Let's schedule a follow-up call for Wednesday to confirm the payment. Does that work for you?",
+      },
+      {
+        role: "user",
+        content: "Yes. It talks to me.",
+      },
+      {
+        role: "agent",
+        content:
+          "Perfect! I'll call you on Wednesday to confirm the payment. Have a great day!",
+      },
+    ],
+  },
+  tenant: {
+    id: 1,
+    first_name: "John",
+    last_name: "Dooe",
+    address: "Cambridge",
+    phone: "+2349056146543",
+    amount: "1000",
+    amount_paid: "0",
+    outstanding_balance: "1000",
+    start_date: "2024-01-02T23:00:00.000Z",
+    due_date: "2024-10-09T23:00:00.000Z",
+    commitment_date: null,
+    current_year: 2024,
+    history: {},
+    user_id: 1,
+  },
+};
 
 export const prompts = [
   {

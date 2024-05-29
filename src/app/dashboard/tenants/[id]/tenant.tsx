@@ -1,19 +1,33 @@
 "use client";
 
 import Loading from "@/components/Loading";
-import { conversation } from "@/constants/data";
+import { conversation, convoData } from "@/constants/data";
 import { DASHBOARD } from "@/constants/path";
 import { GetTenantsMutation } from "@/services/tenants";
-import { Tenant } from "@/utils/types";
+import { GetCampaignsQuery, GetACampaignQuery } from "@/services/campaign";
+import { SingleCampaign, Tenant } from "@/utils/types";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 const TenantDetails = ({ id }: { id: string }) => {
-  const {
-    data: tenants,
-    isLoading: isLoadingTenants,
-    refetch,
-  } = GetTenantsMutation();
+  const [convoIndex, setConvoIndex] = useState(0);
+  const [conversation, setConversation] = useState<SingleCampaign>();
+  const [isLoadingConversation, setIsLoadingConversation] = useState<boolean>();
+
+  const { data: tenants, isLoading: isLoadingTenants } = GetTenantsMutation();
+  const { data: campaigns, isLoading: isLoadingCampaigns } =
+    GetCampaignsQuery(id);
+
+  useEffect(() => {
+    if (campaigns.data.length && convoIndex) {
+      const { data, isLoading } = GetCampaignsQuery(
+        campaigns.data[convoIndex]?.id
+      );
+
+      setConversation(data.data);
+      setIsLoadingConversation(isLoading);
+    }
+  }, [convoIndex]);
 
   const tenant = tenants?.data.find(
     (tenant: Tenant) => tenant.id === parseInt(id)
@@ -48,23 +62,46 @@ const TenantDetails = ({ id }: { id: string }) => {
         <p className="font-bold">Phone Number</p>
         <p>{tenant?.phone}</p>
       </div>
-      {/* <div className="mt-5">
-          <p className="font-bold">Note</p>
-          <p>{tenant?.note}</p>
-        </div> */}
       <div className="mt-5">
-        <p className="font-bold">Transcript</p>
-        <div className="">
-          {conversation.map((convo, index) => {
-            return (
-              <p key={index} className="mt-3">
-                <span className="font-bold">{convo.speaker}</span>:{" "}
-                {convo.message}
-              </p>
-            );
-          })}
+        <p className="font-bold">Summary</p>
+        <p>{campaigns.data[convoIndex]?.conversation.summary}</p>
+      </div>
+      <div className="mt-5">
+        <div className="flex items-center justify-between">
+          <p className="font-bold">Transcript</p>
+          <select onChange={(e) => setConvoIndex(parseInt(e.target.value))}>
+            {isLoadingCampaigns ? (
+              <option hidden selected defaultChecked>
+                Loading...
+              </option>
+            ) : !campaigns.data.length ? (
+              <option hidden selected defaultChecked>
+                No convo yet
+              </option>
+            ) : (
+              campaigns.data.map((campaign: any, index: number) => (
+                <option value={index}>Convo {index}</option>
+              ))
+            )}
+          </select>
         </div>
-        <p>{tenant?.note}</p>
+
+        <div className="pb-20">
+          {conversation?.id ? (
+            conversation?.conversation?.transcript.map(
+              (convo: { role: string; content: string }, index: number) => {
+                return (
+                  <p key={index} className="mt-3">
+                    <span className="font-bold">{convo.role}</span>:{" "}
+                    {convo.content}
+                  </p>
+                );
+              }
+            )
+          ) : (
+            <p className="text-center">No conversation yet</p>
+          )}
+        </div>
       </div>
     </>
   );
