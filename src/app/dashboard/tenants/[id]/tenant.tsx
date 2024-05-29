@@ -22,9 +22,9 @@ const TenantDetails = ({ id }: { id: string }) => {
     isLoading: isLoadingConversation,
     refetch,
   } = useQuery(
-    ["conversation", campaigns.data[convoIndex]?.id],
-    () => GetACampaignQuery(campaigns.data[convoIndex]?.id),
-    { enabled: campaigns.data[convoIndex] }
+    ["conversation", campaigns?.data[convoIndex]?.id],
+    () => GetACampaignQuery(campaigns?.data[convoIndex]?.id),
+    { enabled: campaigns?.data.length > 0 }
   );
 
   // useEffect(() => {
