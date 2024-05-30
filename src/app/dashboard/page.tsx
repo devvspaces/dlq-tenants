@@ -119,25 +119,27 @@ const Dashboard = () => {
           res.toLocaleLowerCase()
         );
 
-        // check if the data has first_name, last_name, phone and address
+        // check if the file contains the required fields
         if (
-          heading?.some((h) => h.includes("first")) &&
-          heading?.some((h) => h.includes("last")) &&
+          heading?.some((h) => h.includes("unit")) &&
+          heading?.some((h) => h.includes("name")) &&
           heading?.some((h) => h.includes("phone")) &&
-          heading?.some((h) => h.includes("address")) &&
-          heading?.some((h) => h.includes("start date")) &&
-          heading?.some((h) => h.includes("due date")) &&
-          heading?.some((h) => h.includes("amount")) &&
-          heading?.some((h) => h.includes("amount paid")) &&
-          heading?.some((h) => h.includes("outstanding")) &&
-          heading?.some((h) => h.includes("year"))
+          heading?.some((h) => h.includes("move in")) &&
+          heading?.some((h) => h.includes("delinquency")) &&
+          heading?.some((h) => h.includes("amount receivable")) &&
+          heading?.some((h) => h.includes("delinquent subsidy amount")) &&
+          heading?.some((h) => h.includes("0-30")) &&
+          heading?.some((h) => h.includes("30+")) &&
+          heading?.some((h) => h.includes("last payment")) &&
+          heading?.some((h) => h.includes("payment amount")) &&
+          heading?.some((h) => h.includes("late count"))
         ) {
           return setUploadedFile(file);
         } else {
           return toast({
             title: "Error",
             description:
-              "File should contain first name, last name, phone, address, amount, amount paid, outstanding balance, year, start date and due date fields",
+              "File should contain Unit, Name, Phone number, Move in, Delinquency, Amount receivable, Delinquent subsidy amount, 0-30, 30+, Last payment, Payment amount and Late Count fields",
             variant: "destructive",
           });
         }
