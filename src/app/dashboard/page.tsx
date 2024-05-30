@@ -37,6 +37,8 @@ const Dashboard = () => {
   const { mutate: mutateUploadTenant, isLoading: isLoadingUploadTenant } =
     UploadTenantsMutation();
 
+  console.log(tenants?.data);
+
   const handleStartCampaign = () => {
     const values = {
       agent_id: "12345",
@@ -155,7 +157,7 @@ const Dashboard = () => {
 
           <div className="flex items-center justify-between w-full">
             <p>Balance</p>
-            <p>&#8358; {(123455).toLocaleString()}</p>
+            <p>$ {(123455).toLocaleString()}</p>
           </div>
         </div>
         <div className="w-full">
@@ -182,10 +184,9 @@ const Dashboard = () => {
           <TableCaption>Tenants details.</TableCaption>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-1/6">First Name</TableHead>
-              <TableHead className="w-1/6">Last Name</TableHead>
-              <TableHead className="2/6">Address</TableHead>
+              <TableHead className="w-1/6">Name</TableHead>
               <TableHead className="w-1/6">Phone Number</TableHead>
+              <TableHead className="3/6">Note</TableHead>
               <TableHead className="w-1/6">Action</TableHead>
             </TableRow>
           </TableHeader>
@@ -206,25 +207,19 @@ const Dashboard = () => {
                       className="font-medium cursor-pointer"
                       onClick={() => handleSingleTenant(tenant.id)}
                     >
-                      {tenant.first_name}
+                      {tenant.name}
                     </TableCell>
                     <TableCell
                       className="font-medium cursor-pointer"
                       onClick={() => handleSingleTenant(tenant.id)}
                     >
-                      {tenant.last_name}
-                    </TableCell>
-                    <TableCell
-                      className="cursor-pointer"
-                      onClick={() => handleSingleTenant(tenant.id)}
-                    >
-                      {tenant.address}
-                    </TableCell>
-                    <TableCell
-                      className="cursor-pointer"
-                      onClick={() => handleSingleTenant(tenant.id)}
-                    >
                       {tenant.phone}
+                    </TableCell>
+                    <TableCell
+                      className="cursor-pointer"
+                      onClick={() => handleSingleTenant(tenant.id)}
+                    >
+                      {tenant.delinquency_notes}
                     </TableCell>
                     <TableCell className="">
                       <RetellCall id={tenant.id} />

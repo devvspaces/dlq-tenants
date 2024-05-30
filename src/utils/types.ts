@@ -42,9 +42,10 @@ export type AuthResponse = {
 
 export type Tenant = {
   id: number;
-  first_name: string;
+  name: string;
   last_name: string;
   address: string;
+  delinquency_notes: string;
   phone: string;
 };
 
