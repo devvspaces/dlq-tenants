@@ -14,11 +14,9 @@ import {
 import Papa from "papaparse";
 import RetellCall from "@/components/RetellCall";
 import Button from "@/components/Button";
-import Link from "next/link";
 import { GetTenantsMutation, UploadTenantsMutation } from "@/services/tenants";
 import { Tenant } from "@/utils/types";
 import Loading from "@/components/Loading";
-import { StartCampaignMutation } from "@/services/campaign";
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 
@@ -33,47 +31,8 @@ const Dashboard = () => {
     isLoading: isLoadingTenants,
     refetch,
   } = GetTenantsMutation();
-  const { mutate, isLoading } = StartCampaignMutation();
   const { mutate: mutateUploadTenant, isLoading: isLoadingUploadTenant } =
     UploadTenantsMutation();
-
-  console.log(tenants?.data);
-
-  const handleStartCampaign = () => {
-    const values = {
-      agent_id: "12345",
-    };
-
-    // @ts-ignore
-    mutate(values, {
-      onSuccess: (data) => {
-        console.log(data);
-        toast({ title: "Campaign started successfully" });
-      },
-      onError: () =>
-        toast({
-          title: "Error",
-          description: "Unable to start campaign",
-          variant: "destructive",
-        }),
-    });
-  };
-
-  const handleEndCampaign = () => {
-    // @ts-ignore
-    mutate(null, {
-      onSuccess: (data) => {
-        console.log(data);
-        toast({ title: "Campaign stopped successfully" });
-      },
-      onError: () =>
-        toast({
-          title: "Error",
-          description: "Unable to end campaign",
-          variant: "destructive",
-        }),
-    });
-  };
 
   const handleUploadTenant = () => {
     if (!uploadedFile) {
@@ -157,7 +116,7 @@ const Dashboard = () => {
 
           <div className="flex items-center justify-between w-full">
             <p>Balance</p>
-            <p>$ {(123455).toLocaleString()}</p>
+            <p>${(123455).toLocaleString()}</p>
           </div>
         </div>
         <div className="w-full">
@@ -223,22 +182,6 @@ const Dashboard = () => {
                     </TableCell>
                     <TableCell className="">
                       <RetellCall id={tenant.id} />
-                      {/* {isRunningCampaign ? (
-                        <Button
-                          className="bg-red-800"
-                          onClick={handleEndCampaign}
-                          isDisabled={isLoading}
-                        >
-                          End
-                        </Button>
-                      ) : (
-                        <Button
-                          onClick={handleStartCampaign}
-                          isDisabled={isLoading}
-                        >
-                          Start
-                        </Button>
-                      )} */}
                     </TableCell>
                   </TableRow>
                 ))
