@@ -31,7 +31,8 @@ const Settings = () => {
     if (settingsData.voice_id && !settingsData.begin_message) {
       setSettingsData({
         ...settingsData,
-        begin_message: settings.data?.begin_message,
+        begin_message:
+          settingsData.begin_message || settings.data?.begin_message,
       });
     } else if (!settingsData.voice_id && settingsData.begin_message) {
       setSettingsData({

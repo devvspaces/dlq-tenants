@@ -18,7 +18,7 @@ const ChangeAIPromptModal = () => {
 
   return (
     <DialogContent className="p-10">
-      <DialogHeader>
+      <DialogHeader className="max-h-80">
         <DialogTitle className="mb-5 text-center">Change AI Prompt</DialogTitle>
         <DialogDescription>
           <div className="md:w-2/3 mx-auto text-center text-[#232555]"></div>
@@ -36,11 +36,11 @@ const ChangeAIPromptModal = () => {
               />
             </div>
           ))}
-          <div className="mt-10 md:w-2/3 mx-auto">
-            <Button className="mt-10 block w-full py-1">Continue</Button>
-          </div>
         </DialogDescription>
       </DialogHeader>
+      <div className="md:w-2/3 mx-auto">
+        <Button className="block w-full py-1">Continue</Button>
+      </div>
     </DialogContent>
   );
 };

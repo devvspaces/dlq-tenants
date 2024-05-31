@@ -9,11 +9,10 @@ import {
 } from "@/components/ui/dialog";
 import Button from "../Button";
 import Image from "next/image";
-// import { voices } from "@/constants/data";
 import { GetVoicesQuery } from "@/services/settings";
+import Loading from "../Loading";
 
 import tick from "@/assets/icons/tick.svg";
-import Loading from "../Loading";
 
 const SelectVoiceModal = ({
   handleChangeVoice,
