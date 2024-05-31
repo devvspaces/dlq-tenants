@@ -9,38 +9,68 @@ import {
 } from "@/components/ui/dialog";
 import Button from "../Button";
 import Image from "next/image";
-import { voices } from "@/constants/data";
+// import { voices } from "@/constants/data";
+import { GetVoicesQuery } from "@/services/settings";
 
 import tick from "@/assets/icons/tick.svg";
+import Loading from "../Loading";
 
-const SelectVoiceModal = () => {
-  const [selectedIndex, setSelectedIndex] = useState(0);
+const SelectVoiceModal = ({
+  handleChangeVoice,
+}: {
+  handleChangeVoice: (voice: any) => void;
+}) => {
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const [selectedVoice, setSelectedVoice] = useState();
+
+  const { data: voices, isLoading } = GetVoicesQuery();
+
+  const setVoice = (index: number, voice: any) => {
+    setSelectedIndex(index);
+    setSelectedVoice(voice);
+  };
 
   return (
     <DialogContent className="p-10">
-      <DialogHeader>
+      <DialogHeader className="max-h-80">
         <DialogTitle className="mb-5 text-center">Select AI Voice</DialogTitle>
-        <DialogDescription>
+        <DialogDescription className="overflow-y-scroll ">
           <div className="md:w-2/3 mx-auto text-center text-[#232555]"></div>
-          {voices.map((voice, index) => (
-            <div
-              key={index}
-              onClick={() => setSelectedIndex(index)}
-              className="cursor-pointer text-xs my-3 py-5 px-3 flex items-center justify-between border border-[#EBEBEB] rounded-md"
-            >
-              <p>{voice.label}</p>
-              <Image
-                className={selectedIndex === index ? "block" : "hidden"}
-                src={tick}
-                alt="tick"
-              />
-            </div>
-          ))}
-          <div className="mt-10 md:w-2/3 mx-auto">
-            <Button className="mt-10 block w-full py-1">Continue</Button>
-          </div>
+          {isLoading ? (
+            <Loading color="#000" />
+          ) : (
+            voices.data.map((voice: any, index: number) => (
+              <div
+                key={index}
+                onClick={() => setVoice(index, voice?.voice_id)}
+                className="cursor-pointer text-xs my-3 py-5 px-3 flex items-center justify-between border border-[#EBEBEB] rounded-md"
+              >
+                <div className="">
+                  <p className="font-semibold mb-2">{voice?.name}</p>
+                  <div className="flex items-center gap-3">
+                    <p>{voice?.gender}</p>
+                    <p>{voice?.accent}</p>
+                    <p>${voice?.pricing}</p>
+                  </div>
+                </div>
+                <Image
+                  className={selectedIndex === index ? "block" : "hidden"}
+                  src={tick}
+                  alt="tick"
+                />
+              </div>
+            ))
+          )}
         </DialogDescription>
       </DialogHeader>
+      <div className="md:w-2/3 mx-auto">
+        <Button
+          onClick={() => handleChangeVoice(selectedVoice)}
+          className="block w-full py-1"
+        >
+          Continue
+        </Button>
+      </div>
     </DialogContent>
   );
 };
