@@ -14,5 +14,7 @@ export const GetVoicesQuery = () => {
 };
 
 export const UpdateSettingsMutation = () => {
-  return useMutation((data) => Api.patch("user/settings", data));
+  return useMutation((data) => {
+    return Api.patch("user/settings", data);
+  });
 };

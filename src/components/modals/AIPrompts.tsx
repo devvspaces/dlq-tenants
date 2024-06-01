@@ -8,13 +8,15 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import Button from "../Button";
-import Image from "next/image";
-import { prompts } from "@/constants/data";
 
-import tick from "@/assets/icons/tick.svg";
-
-const ChangeAIPromptModal = () => {
-  const [selectedIndex, setSelectedIndex] = useState(0);
+const ChangeAIPromptModal = ({
+  ai_prompt,
+  handleUpdatePrompt,
+}: {
+  ai_prompt: string;
+  handleUpdatePrompt: (val: string) => void;
+}) => {
+  const [prompt, setPrompt] = useState(ai_prompt);
 
   return (
     <DialogContent className="p-10">
@@ -22,24 +24,24 @@ const ChangeAIPromptModal = () => {
         <DialogTitle className="mb-5 text-center">Change AI Prompt</DialogTitle>
         <DialogDescription>
           <div className="md:w-2/3 mx-auto text-center text-[#232555]"></div>
-          {prompts.map((prompt, index) => (
-            <div
-              key={index}
-              onClick={() => setSelectedIndex(index)}
-              className="cursor-pointer text-xs my-3 py-5 px-3 flex items-center justify-between border border-[#EBEBEB] rounded-md"
-            >
-              <p>{prompt.label}</p>
-              <Image
-                className={selectedIndex === index ? "block" : "hidden"}
-                src={tick}
-                alt="tick"
-              />
-            </div>
-          ))}
+          <textarea
+            value={prompt}
+            onChange={(e) => setPrompt(e.target.value)}
+            className="w-full p-5 outline-none border border-[#EBEBEB] rounded-md"
+            rows={5}
+          ></textarea>
+          <p className="text-sm mt-2 italic text-center">
+            If you want the AI to speak first, clear the input box above.
+          </p>
         </DialogDescription>
       </DialogHeader>
       <div className="md:w-2/3 mx-auto">
-        <Button className="block w-full py-1">Continue</Button>
+        <Button
+          onClick={() => handleUpdatePrompt(prompt)}
+          className="block w-full py-1"
+        >
+          Continue
+        </Button>
       </div>
     </DialogContent>
   );

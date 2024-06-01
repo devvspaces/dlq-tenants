@@ -71,8 +71,8 @@ const RetellCall = ({ id }: { id: number }) => {
     webClient.stopConversation();
 
     const endCallData = {
-      call_sid: callSid,
       tenant_id: id,
+      call_sid: callSid,
     };
 
     //@ts-ignore

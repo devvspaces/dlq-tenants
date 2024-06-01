@@ -8,17 +8,27 @@ import SelectVoiceModal from "@/components/modals/SelectVoice";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { useToast } from "@/components/ui/use-toast";
 import { GetSettingsQuery, UpdateSettingsMutation } from "@/services/settings";
-import React, { useState } from "react";
+import { UpdateSettings } from "@/utils/types";
+import React, { useEffect, useState } from "react";
 
 const Settings = () => {
   const [isOpened, setIsOpened] = useState(false);
-  const [settingsData, setSettingsData] = useState({
+  const [prompt, setPrompt] = useState("");
+  const [settingsData, setSettingsData] = useState<UpdateSettings>({
     voice_id: "",
     begin_message: "",
+    general_prompt: "",
   });
-  const { data: settings, isLoading } = GetSettingsQuery();
+
+  const { data: settings, isLoading, refetch } = GetSettingsQuery();
   const { mutate, isLoading: isLoadingUpdateSettings } =
     UpdateSettingsMutation();
+
+  useEffect(() => {
+    if (!isLoading && settings?.data) {
+      setPrompt(settings.data?.begin_message);
+    }
+  }, [isLoading, settings?.data]);
 
   const { toast } = useToast();
 
@@ -27,24 +37,33 @@ const Settings = () => {
     setIsOpened(false);
   };
 
+  const handleUpdatePrompt = (val: string) => {
+    setSettingsData({ ...settingsData, begin_message: val });
+    setPrompt(val);
+  };
+
   const handleUpdateSettings = () => {
-    if (settingsData.voice_id && !settingsData.begin_message) {
-      setSettingsData({
-        ...settingsData,
-        begin_message:
-          settingsData.begin_message || settings.data?.begin_message,
-      });
-    } else if (!settingsData.voice_id && settingsData.begin_message) {
-      setSettingsData({
-        ...settingsData,
-        voice_id: settings.data?.begin_message,
-      });
-    } else if (!settingsData.voice_id && !settingsData.begin_message) {
+    if (
+      !settingsData.voice_id &&
+      settingsData.begin_message === settings.data?.begin_message &&
+      !settingsData.general_prompt
+    ) {
       return toast({
         title: "No changes occurred",
         variant: "destructive",
       });
     }
+
+    if (!settingsData.voice_id) {
+      settingsData.voice_id = settings.data?.voice;
+    }
+
+    if (!settingsData.general_prompt) {
+      // remove genera_prompt from settingsData state in js
+      delete settingsData.general_prompt;
+    }
+
+    // return console.log(settingsData);
 
     //@ts-ignore
     mutate(settingsData, {
@@ -59,6 +78,9 @@ const Settings = () => {
           variant: "destructive",
         }),
     });
+
+    // Refetch settings data
+    refetch();
   };
 
   return (
@@ -70,7 +92,7 @@ const Settings = () => {
           onClick={handleUpdateSettings}
           isDisabled={isLoadingUpdateSettings}
         >
-          Save
+          {isLoadingUpdateSettings ? "Saving" : "Save"}
         </Button>
       </div>
       {isLoading ? (
@@ -92,14 +114,16 @@ const Settings = () => {
           <div className="flex items-center gap-10 justify-between mb-5">
             <div className="mt-5">
               <p className="font-bold">AI Prompt: </p>
-              <p className="text-sm">{settings.data?.begin_message}</p>
+              <textarea
+                value={prompt}
+                onChange={(e) => handleUpdatePrompt(e.target.value)}
+                className="w-full p-5 outline-none border border-[#EBEBEB] rounded-md"
+                rows={3}
+              ></textarea>
+              <p className="text-sm mt-2 italic text-center">
+                If you want the AI to speak first, clear the input box above.
+              </p>
             </div>
-            <Dialog>
-              <DialogTrigger>
-                <Button>Change</Button>
-              </DialogTrigger>
-              <ChangeAIPromptModal />
-            </Dialog>
           </div>
           <div className="flex items-center gap-10 justify-between mb-5">
             <div className="mt-5">
