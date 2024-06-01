@@ -36,6 +36,8 @@ const TenantDetails = ({ id }: { id: string }) => {
     return <Loading color="#232555" />;
   }
 
+  console.log(campaigns);
+
   return (
     <>
       <div className="flex gap-5 items-center">
@@ -45,21 +47,19 @@ const TenantDetails = ({ id }: { id: string }) => {
 
       <div className="mt-10">
         <p className="font-bold">Full name</p>
-        <p>
-          {tenant?.first_name} {tenant?.last_name}
-        </p>
-      </div>
-      <div className="mt-5">
-        <p className="font-bold">Amount</p>
-        <p>{tenant?.amount}</p>
-      </div>
-      <div className="mt-5">
-        <p className="font-bold">Amount Paid</p>
-        <p>{tenant?.amount_paid}</p>
+        <p>{tenant?.name}</p>
       </div>
       <div className="mt-5">
         <p className="font-bold">Phone Number</p>
         <p>{tenant?.phone}</p>
+      </div>
+      <div className="mt-5">
+        <p className="font-bold">Amount Receivable</p>
+        <p>{tenant?.amount_receivable}</p>
+      </div>
+      <div className="mt-5">
+        <p className="font-bold">Notes</p>
+        <p>{tenant?.delinquency_notes}</p>
       </div>
       <div className="mt-5">
         <p className="font-bold">Summary</p>
@@ -73,32 +73,37 @@ const TenantDetails = ({ id }: { id: string }) => {
         <p className="font-bold">Next call</p>
         <p>
           {campaigns?.data[convoIndex]
-            ? moment(campaigns.data[convoIndex]?.next_call).format("Do MMM, YYYY - hh:mm A (dddd)")
+            ? moment(campaigns.data[convoIndex]?.next_call).format(
+                "Do MMM, YYYY - hh:mm A (dddd)"
+              )
             : "-"}
         </p>
       </div>
       <div className="mt-5">
         <div className="flex items-center justify-between">
           <p className="font-bold">Transcript</p>
-          <select defaultValue={'z'} onChange={(e) => setConvoIndex(parseInt(e.target.value))}>
+          <select
+            defaultValue={"z"}
+            onChange={(e) => setConvoIndex(parseInt(e.target.value))}
+          >
             {isLoadingCampaigns ? (
-              <option hidden  value={'z'} defaultChecked>
+              <option hidden value={"z"} defaultChecked>
                 Loading...
               </option>
             ) : !campaigns.data.length ? (
-              <option hidden  value={'z'} defaultChecked>
+              <option hidden value={"z"} defaultChecked>
                 No convo yet
               </option>
             ) : (
-                <>
-                <option value={'z'} hidden defaultChecked>
-                    Select Convo
+              <>
+                <option value={"z"} hidden defaultChecked>
+                  Select Convo
                 </option>
-                {
-                  campaigns.data.map((campaign: any, index: number) => (
-                    <option value={index} key={index}>Convo {index + 1}</option>
-                  ))
-                }
+                {campaigns.data.map((campaign: any, index: number) => (
+                  <option value={index} key={index}>
+                    Convo {index + 1}
+                  </option>
+                ))}
               </>
             )}
           </select>

@@ -71,8 +71,8 @@ const RetellCall = ({ id }: { id: number }) => {
     webClient.stopConversation();
 
     const endCallData = {
-      tenant_id: id,
       call_sid: callSid,
+      tenant_id: id,
     };
 
     //@ts-ignore
@@ -114,7 +114,7 @@ const RetellCall = ({ id }: { id: number }) => {
         throw new Error(`Error: ${response.status}`);
       }
 
-      setCallSid(response.data?.call_sid);
+      setCallSid(response.data?.data?.call_sid);
 
       toast({
         title: response.data?.message,

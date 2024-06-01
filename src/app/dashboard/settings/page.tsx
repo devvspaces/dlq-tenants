@@ -90,7 +90,7 @@ const Settings = () => {
       <div className="flex items-center justify-between">
         <h1>Settings</h1>
         <Button
-          className="w-auto"
+          className="!w-auto"
           onClick={handleUpdateSettings}
           isDisabled={isLoadingUpdateSettings}
         >
