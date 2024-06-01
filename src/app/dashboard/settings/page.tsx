@@ -144,18 +144,6 @@ const Settings = () => {
               <SelectVoiceModal handleChangeVoice={handleChangeVoice} />
             </Dialog>
           </div>
-          <div className="flex items-center justify-between mb-5">
-            <div className="mt-5">
-              <p className="font-bold">Set Google Sheet: </p>
-              {/* <p>{settings.data?.voice_speed}</p> */}
-            </div>
-            <Dialog>
-              <DialogTrigger>
-                <Button>Set</Button>
-              </DialogTrigger>
-              <SelectGSModal />
-            </Dialog>
-          </div>
         </div>
       )}
     </div>
