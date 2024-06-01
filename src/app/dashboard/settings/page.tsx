@@ -13,6 +13,7 @@ import React, { useEffect, useState } from "react";
 
 const Settings = () => {
   const [isOpened, setIsOpened] = useState(false);
+  const [newVoice, setNewVoice] = useState("");
   const [prompt, setPrompt] = useState("");
   const [settingsData, setSettingsData] = useState<UpdateSettings>({
     voice_id: "",
@@ -34,6 +35,7 @@ const Settings = () => {
 
   const handleChangeVoice = (voice: any) => {
     setSettingsData({ ...settingsData, voice_id: voice });
+    setNewVoice(voice);
     setIsOpened(false);
   };
 
@@ -58,18 +60,21 @@ const Settings = () => {
       settingsData.voice_id = settings.data?.voice;
     }
 
-    if (!settingsData.general_prompt) {
-      // remove genera_prompt from settingsData state in js
-      delete settingsData.general_prompt;
+    if (!settingsData.begin_message) {
+      settingsData.begin_message = settings.data?.begin_message;
     }
 
-    // return console.log(settingsData);
+    if (!settingsData.general_prompt) {
+      delete settingsData.general_prompt;
+    }
 
     //@ts-ignore
     mutate(settingsData, {
       onSuccess: (data) => {
         console.log(data);
         toast({ title: "Settings Updated successfully" });
+        // Refetch settings data
+        refetch();
       },
       onError: () =>
         toast({
@@ -78,9 +83,6 @@ const Settings = () => {
           variant: "destructive",
         }),
     });
-
-    // Refetch settings data
-    refetch();
   };
 
   return (
@@ -129,6 +131,11 @@ const Settings = () => {
             <div className="mt-5">
               <p className="font-bold">Voice : </p>
               <p className="text-sm">{settings.data?.voice}</p>
+              {newVoice ? (
+                <p className="text-sm">New Voice Selected: {newVoice}</p>
+              ) : (
+                <></>
+              )}
             </div>
             <Dialog open={isOpened} onOpenChange={setIsOpened}>
               <DialogTrigger>
