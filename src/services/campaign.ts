@@ -9,7 +9,7 @@ export const StartCampaignMutation = () => {
 
 export const EndCampaignMutation = () => {
   return useMutation((data) => {
-    return Api.post("campaigns/end", data);
+    return Api.post("campaigns/stop", data);
   });
 };
 
@@ -26,5 +26,3 @@ export const GetACampaignQuery = (id: string) => {
     return Api.get(`campaigns/detail/${id}`).then((res) => res.data);
   });
 };
-
-

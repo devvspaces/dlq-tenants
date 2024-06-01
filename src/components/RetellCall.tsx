@@ -7,13 +7,16 @@ import React, { useEffect, useState } from "react";
 import { RetellWebClient } from "retell-client-js-sdk";
 import { useToast } from "@/components/ui/use-toast";
 import { GetUserProfile } from "@/services/auth";
+import { EndCampaignMutation } from "@/services/campaign";
 
 const webClient = new RetellWebClient();
 
 const RetellCall = ({ id }: { id: number }) => {
   const [isCalling, setIsCalling] = useState(false);
+  const [callSid, setCallSid] = useState("");
 
   const { data: userData, isLoading } = GetUserProfile();
+  const { mutate, isLoading: isLoadingEndCampaign } = EndCampaignMutation();
 
   const { toast } = useToast();
 
@@ -67,7 +70,25 @@ const RetellCall = ({ id }: { id: number }) => {
   const endCall = async () => {
     webClient.stopConversation();
 
-    setIsCalling(false);
+    const endCallData = {
+      call_sid: callSid,
+      tenant_id: id,
+    };
+
+    //@ts-ignore
+    mutate(endCallData, {
+      onSuccess: (data) => {
+        console.log(data);
+        setIsCalling(false);
+        toast({ title: "Call ended successfully" });
+      },
+      onError: () =>
+        toast({
+          title: "Error",
+          description: "Unable to end call",
+          variant: "destructive",
+        }),
+    });
   };
 
   async function registerCall(agent_id: string): Promise<RegisterCallResponse> {
@@ -92,6 +113,8 @@ const RetellCall = ({ id }: { id: number }) => {
       if (!response.data) {
         throw new Error(`Error: ${response.status}`);
       }
+
+      setCallSid(response.data?.call_sid);
 
       toast({
         title: response.data?.message,

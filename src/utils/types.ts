@@ -128,3 +128,9 @@ export type SingleCampaign = {
     user_id: number;
   };
 };
+
+export type UpdateSettings = {
+  voice_id: string;
+  begin_message: string;
+  general_prompt?: string;
+};
