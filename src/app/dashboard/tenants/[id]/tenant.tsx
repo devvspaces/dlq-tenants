@@ -36,8 +36,6 @@ const TenantDetails = ({ id }: { id: string }) => {
     return <Loading color="#232555" />;
   }
 
-  console.log(campaigns);
-
   return (
     <>
       <div className="flex gap-5 items-center">

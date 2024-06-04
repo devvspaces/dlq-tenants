@@ -1,6 +1,18 @@
 import { useMutation, useQuery } from "react-query";
 import Api from "@/utils/api";
 
+export const StartAllCampaignsMutation = () => {
+  return useMutation((data) => {
+    return Api.post("campaigns/start_all", data);
+  });
+};
+
+export const StopAllCampaignsMutation = () => {
+  return useMutation((data) => {
+    return Api.post("campaigns/stop_all", data);
+  });
+};
+
 export const StartCampaignMutation = () => {
   return useMutation((data) => {
     return Api.post("campaigns/start", data);

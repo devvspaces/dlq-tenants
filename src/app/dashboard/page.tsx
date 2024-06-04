@@ -19,8 +19,13 @@ import { Tenant } from "@/utils/types";
 import Loading from "@/components/Loading";
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
+import {
+  StartAllCampaignsMutation,
+  StopAllCampaignsMutation,
+} from "@/services/campaign";
 
 const Dashboard = () => {
+  const [isRunningCampaigns, setIsRunningCampaigns] = useState(false);
   const [uploadedFile, setUploadedFile] = useState<File>();
 
   const { toast } = useToast();
@@ -33,6 +38,10 @@ const Dashboard = () => {
   } = GetTenantsMutation();
   const { mutate: mutateUploadTenant, isLoading: isLoadingUploadTenant } =
     UploadTenantsMutation();
+  const { mutate: mutateStartAll, isLoading: isLoadingStartAll } =
+    StartAllCampaignsMutation();
+  const { mutate: mutateStopAll, isLoading: isLoadingStopAll } =
+    StopAllCampaignsMutation();
 
   const handleUploadTenant = () => {
     if (!uploadedFile) {
@@ -49,7 +58,6 @@ const Dashboard = () => {
     // @ts-ignore
     mutateUploadTenant(data, {
       onSuccess: (data) => {
-        console.log(data);
         toast({ title: "Tenant uploaded successfully" });
 
         // Refetch tenants
@@ -61,6 +69,40 @@ const Dashboard = () => {
           description: "Unable to upload tenant",
           variant: "destructive",
         }),
+    });
+  };
+
+  const handleStartAll = () => {
+    const campaignsToStart = [{ tenant_id: 1, agent_id: 1 }];
+    // tenants?.forEach((tenant) => {
+    //   campaignsToStart.push(tenant.id);
+    //   });
+
+    //@ts-ignore
+    mutateStartAll(campaignsToStart, {
+      onSuccess: () => {
+        toast({ title: "All campaigns started successfully" });
+        refetch();
+      },
+      onError: () =>
+        toast({ title: "Error", description: "Unable to start campaigns" }),
+    });
+  };
+
+  const handleStopAll = () => {
+    const campaignsToStop = [{ tenant_id: 1, call_sid: "" }];
+    // tenants?.forEach((tenant) => {
+    //   campaignsToStop.push(tenant.id);
+    //   });
+
+    //@ts-ignore
+    mutateStopAll(campaignsToStop, {
+      onSuccess: () => {
+        toast({ title: "All campaigns started successfully" });
+        refetch();
+      },
+      onError: () =>
+        toast({ title: "Error", description: "Unable to start campaigns" }),
     });
   };
 
@@ -134,7 +176,9 @@ const Dashboard = () => {
       </div>
 
       <div className="flex justify-end mt-10">
-        <Button className="!w-auto">Start All</Button>
+        <Button className="!w-auto" onClick={handleStartAll}>
+          Start All
+        </Button>
       </div>
 
       {/* Tenants details table */}
