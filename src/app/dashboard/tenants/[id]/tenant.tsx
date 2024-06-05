@@ -2,7 +2,7 @@
 
 import Loading from "@/components/Loading";
 import { DASHBOARD } from "@/constants/path";
-import { GetTenantsMutation } from "@/services/tenants";
+import { GetTenantQuery, GetTenantsMutation } from "@/services/tenants";
 import { GetCampaignsQuery } from "@/services/campaign";
 import { Tenant } from "@/utils/types";
 import Link from "next/link";
@@ -15,9 +15,9 @@ import moment from "moment";
 const TenantDetails = ({ id }: { id: string }) => {
   const [convoIndex, setConvoIndex] = useState(-1);
 
-  const { data: tenants, isLoading: isLoadingTenants } = GetTenantsMutation();
   const { data: campaigns, isLoading: isLoadingCampaigns } =
     GetCampaignsQuery(id);
+  const { data: tenant, isLoading: isLoadingTenant } = GetTenantQuery(id);
 
   const { data: conversation, isLoading: isLoadingConversation } = useQuery(
     ["conversation", campaigns?.data[convoIndex]?.id],
@@ -28,11 +28,7 @@ const TenantDetails = ({ id }: { id: string }) => {
     { enabled: convoIndex > -1 }
   );
 
-  const tenant = tenants?.data.find(
-    (tenant: Tenant) => tenant.id === parseInt(id)
-  );
-
-  if (isLoadingTenants) {
+  if (isLoadingTenant) {
     return <Loading color="#232555" />;
   }
 
@@ -45,19 +41,19 @@ const TenantDetails = ({ id }: { id: string }) => {
 
       <div className="mt-10">
         <p className="font-bold">Full name</p>
-        <p>{tenant?.name}</p>
+        <p>{tenant.data?.name}</p>
       </div>
       <div className="mt-5">
         <p className="font-bold">Phone Number</p>
-        <p>{tenant?.phone}</p>
+        <p>{tenant.data?.phone}</p>
       </div>
       <div className="mt-5">
         <p className="font-bold">Amount Receivable</p>
-        <p>{tenant?.amount_receivable}</p>
+        <p>{tenant.data?.amount_receivable}</p>
       </div>
       <div className="mt-5">
         <p className="font-bold">Notes</p>
-        <p>{tenant?.delinquency_notes}</p>
+        <p>{tenant.data?.delinquency_notes}</p>
       </div>
       <div className="mt-5">
         <p className="font-bold">Summary</p>

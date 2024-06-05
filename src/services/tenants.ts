@@ -23,3 +23,9 @@ export const GetTenantsMutation = (month: string) => {
     return Api.get(`user/tenants/${month}`).then((res) => res.data);
   });
 };
+
+export const GetTenantQuery = (id: string) => {
+  return useQuery("tenant", () => {
+    return Api.get(`users/tenants/${id}`).then((res) => res.data);
+  });
+};
