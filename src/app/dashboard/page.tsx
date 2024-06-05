@@ -1,7 +1,7 @@
 "use client";
 
 import FileInput from "@/components/FileInput";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -23,10 +23,13 @@ import {
   StartAllCampaignsMutation,
   StopAllCampaignsMutation,
 } from "@/services/campaign";
+import { months } from "@/constants/data";
 
 const Dashboard = () => {
-  const [isRunningCampaigns, setIsRunningCampaigns] = useState(false);
+  const currentMonth = new Date().getMonth();
   const [uploadedFile, setUploadedFile] = useState<File>();
+  const [month, setMonth] = useState(months[currentMonth]);
+  const [amountBalance, setAmountBalance] = useState("");
 
   const { toast } = useToast();
   const router = useRouter();
@@ -35,7 +38,7 @@ const Dashboard = () => {
     data: tenants,
     isLoading: isLoadingTenants,
     refetch,
-  } = GetTenantsMutation();
+  } = GetTenantsMutation(month);
   const { mutate: mutateUploadTenant, isLoading: isLoadingUploadTenant } =
     UploadTenantsMutation();
   const { mutate: mutateStartAll, isLoading: isLoadingStartAll } =
@@ -43,7 +46,26 @@ const Dashboard = () => {
   const { mutate: mutateStopAll, isLoading: isLoadingStopAll } =
     StopAllCampaignsMutation();
 
+  useEffect(() => {
+    if (!isLoadingTenants && tenants.data) {
+      const summedUpBalance = tenants.data.reduce(
+        (accumulator: number, tenant: Tenant) => {
+          return (accumulator += parseInt(tenant.amount_receivable));
+        },
+        0
+      );
+
+      setAmountBalance(summedUpBalance);
+    }
+  }, [tenants, isLoadingTenants]);
+
   const handleUploadTenant = () => {
+    if (!month) {
+      return toast({
+        title: "Please select the month",
+        variant: "destructive",
+      });
+    }
     if (!uploadedFile) {
       return toast({
         title: "Please upload tenant details",
@@ -54,6 +76,7 @@ const Dashboard = () => {
     // append file to a form
     const data = new FormData();
     data.append("tenants", uploadedFile);
+    data.append("month", month);
 
     // @ts-ignore
     mutateUploadTenant(data, {
@@ -156,13 +179,35 @@ const Dashboard = () => {
         <div className="w-full">
           <h1>Overview</h1>
 
-          <div className="flex items-center justify-between w-full">
-            <p>Balance</p>
-            <p>${(123455).toLocaleString()}</p>
+          <div className="mb-5 flex items-center justify-between w-full">
+            <p>Amount Receivable</p>
+            <p>
+              ${amountBalance === "" ? "0" : amountBalance.toLocaleString()}
+            </p>
           </div>
         </div>
         <div className="w-full">
           <h1>Campaigns</h1>
+          <div className="">
+            {/* <div className="flex justify-between items-center mb-4">
+              <p>Current month</p>
+              <p className="font-bold capitalize">{month}</p>
+            </div> */}
+            <p>Select month</p>
+            <select
+              className="border mb-4"
+              onChange={(e) => setMonth(e.target.value)}
+            >
+              <option hidden selected defaultChecked>
+                Select Month
+              </option>
+              {months.map((m) => (
+                <option key={m} value={m} className="capitalize">
+                  {m}
+                </option>
+              ))}
+            </select>
+          </div>
           <p>Upload tenant details</p>
           <FileInput maxSize={maxSize} onFileChange={handleFileChange} />
           <Button
@@ -175,7 +220,7 @@ const Dashboard = () => {
         </div>
       </div>
 
-      <div className="flex justify-end mt-10">
+      <div className="flex justify-end mt-5">
         <Button className="!w-auto" onClick={handleStartAll}>
           Start All
         </Button>
@@ -189,7 +234,8 @@ const Dashboard = () => {
             <TableRow>
               <TableHead className="w-1/6">Name</TableHead>
               <TableHead className="w-1/6">Phone Number</TableHead>
-              <TableHead className="3/6">Note</TableHead>
+              <TableHead className="1/6">Rent Balance</TableHead>
+              <TableHead className="2/6">Note</TableHead>
               <TableHead className="w-1/6">Action</TableHead>
             </TableRow>
           </TableHeader>
@@ -217,6 +263,12 @@ const Dashboard = () => {
                       onClick={() => handleSingleTenant(tenant.id)}
                     >
                       {tenant.phone}
+                    </TableCell>
+                    <TableCell
+                      className="font-medium cursor-pointer"
+                      onClick={() => handleSingleTenant(tenant.id)}
+                    >
+                      ${tenant.amount_receivable}
                     </TableCell>
                     <TableCell
                       className="cursor-pointer"

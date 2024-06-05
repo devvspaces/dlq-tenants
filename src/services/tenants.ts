@@ -18,8 +18,8 @@ export const UploadTenantsMutation = () => {
   });
 };
 
-export const GetTenantsMutation = () => {
+export const GetTenantsMutation = (month: string) => {
   return useQuery("tenants", () => {
-    return Api.get("user/tenants").then((res) => res.data);
+    return Api.get(`user/tenants/${month}`).then((res) => res.data);
   });
 };

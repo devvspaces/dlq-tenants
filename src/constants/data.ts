@@ -233,3 +233,18 @@ export const sheets = [
     label: "Google Sheet 3",
   },
 ];
+
+export const months = [
+  "january",
+  "february",
+  "march",
+  "april",
+  "may",
+  "june",
+  "july",
+  "august",
+  "september",
+  "october",
+  "november",
+  "december",
+];
