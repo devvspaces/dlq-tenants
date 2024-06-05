@@ -49,7 +49,7 @@ const Dashboard = () => {
   useEffect(() => {
     if (!isLoadingTenants && tenants.data) {
       const summedUpBalance = tenants.data.reduce(
-        (accumulator: number, tenant: Tenant) => {
+        (accumulator: number, tenant: any) => {
           return (accumulator += parseInt(tenant.amount_receivable));
         },
         0

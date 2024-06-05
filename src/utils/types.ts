@@ -47,6 +47,7 @@ export type Tenant = {
   address: string;
   delinquency_notes: string;
   phone: string;
+  amount_receivable: string;
 };
 
 export type Campaigns = {
