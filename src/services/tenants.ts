@@ -30,6 +30,6 @@ export const GetTenantQuery = (id: string) => {
     () => {
       return Api.get(`user/tenants/${id}`).then((res) => res.data);
     },
-    { cacheTime: 0 }
+    { cacheTime: 0, refetchOnMount: true }
   );
 };

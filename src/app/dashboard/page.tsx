@@ -177,6 +177,11 @@ const Dashboard = () => {
     });
   };
 
+  const handleCallTenant = (value: string) => {
+    setMonth(value);
+    refetch();
+  };
+
   return (
     <div>
       <div className="flex flex-col md:flex-row gap-10">
@@ -198,9 +203,9 @@ const Dashboard = () => {
               className="border mb-4"
               onChange={(e) => setMonth(e.target.value)}
             >
-              {/* <option hidden selected defaultChecked>
+              <option hidden selected defaultChecked>
                 Select Month
-              </option> */}
+              </option>
               {months.map((m) => (
                 <option key={m} value={month} className="capitalize">
                   {m}
@@ -233,6 +238,22 @@ const Dashboard = () => {
         <Button className="!w-auto" onClick={handleStartAll}>
           Start All
         </Button>
+      </div>
+
+      <div className="">
+        <select
+          className="border mb-4"
+          onChange={(e) => handleCallTenant(e.target.value)}
+        >
+          <option hidden selected defaultChecked>
+            Select month to display
+          </option>
+          {months.map((m) => (
+            <option key={m} value={m} className="capitalize">
+              {m}
+            </option>
+          ))}
+        </select>
       </div>
 
       {/* Tenants details table */}
