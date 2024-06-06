@@ -41,19 +41,19 @@ const TenantDetails = ({ id }: { id: string }) => {
 
       <div className="mt-10">
         <p className="font-bold">Full name</p>
-        <p>{tenant.data?.name}</p>
+        <p>{tenant.data[0]?.name}</p>
       </div>
       <div className="mt-5">
         <p className="font-bold">Phone Number</p>
-        <p>{tenant.data?.phone}</p>
+        <p>{tenant.data[0]?.phone}</p>
       </div>
       <div className="mt-5">
         <p className="font-bold">Amount Receivable</p>
-        <p>{tenant.data?.amount_receivable}</p>
+        <p>${tenant.data[0]?.amount_receivable}</p>
       </div>
       <div className="mt-5">
         <p className="font-bold">Notes</p>
-        <p>{tenant.data?.delinquency_notes}</p>
+        <p>{tenant.data[0]?.delinquency_notes}</p>
       </div>
       <div className="mt-5">
         <p className="font-bold">Summary</p>

@@ -18,14 +18,14 @@ export const UploadTenantsMutation = () => {
   });
 };
 
-export const GetTenantsMutation = (month: string) => {
+export const GetTenantsMutation = (month: string, year: number) => {
   return useQuery("tenants", () => {
-    return Api.get(`user/tenants/${month}`).then((res) => res.data);
+    return Api.get(`user/tenants/${month}/${year}`).then((res) => res.data);
   });
 };
 
 export const GetTenantQuery = (id: string) => {
   return useQuery("tenant", () => {
-    return Api.get(`users/tenants/${id}`).then((res) => res.data);
+    return Api.get(`user/tenants/${id}`).then((res) => res.data);
   });
 };
