@@ -27,8 +27,11 @@ import { months } from "@/constants/data";
 
 const Dashboard = () => {
   const currentMonth = new Date().getMonth();
+  const currentYear = new Date().getFullYear();
+
   const [uploadedFile, setUploadedFile] = useState<File>();
   const [month, setMonth] = useState(months[currentMonth]);
+  const [year, setYear] = useState(currentYear);
   const [amountBalance, setAmountBalance] = useState("");
 
   const { toast } = useToast();
@@ -38,7 +41,7 @@ const Dashboard = () => {
     data: tenants,
     isLoading: isLoadingTenants,
     refetch,
-  } = GetTenantsMutation(month);
+  } = GetTenantsMutation(month, year);
   const { mutate: mutateUploadTenant, isLoading: isLoadingUploadTenant } =
     UploadTenantsMutation();
   const { mutate: mutateStartAll, isLoading: isLoadingStartAll } =
@@ -76,6 +79,7 @@ const Dashboard = () => {
     // append file to a form
     const data = new FormData();
     data.append("tenants", uploadedFile);
+    data.append("year", year);
     data.append("month", month);
 
     // @ts-ignore
@@ -189,10 +193,6 @@ const Dashboard = () => {
         <div className="w-full">
           <h1>Campaigns</h1>
           <div className="">
-            {/* <div className="flex justify-between items-center mb-4">
-              <p>Current month</p>
-              <p className="font-bold capitalize">{month}</p>
-            </div> */}
             <p>Select month</p>
             <select
               className="border mb-4"
@@ -207,6 +207,15 @@ const Dashboard = () => {
                 </option>
               ))}
             </select>
+            <div className="flex justify-between items-center mb-4">
+              <p>Year</p>
+              <input
+                type=""
+                value={year}
+                onChange={(e) => setYear(parseInt(e.target.value))}
+                className="border border-black outline-none"
+              />
+            </div>
           </div>
           <p>Upload tenant details</p>
           <FileInput maxSize={maxSize} onFileChange={handleFileChange} />
