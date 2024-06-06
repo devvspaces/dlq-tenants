@@ -79,7 +79,7 @@ const Dashboard = () => {
     // append file to a form
     const data = new FormData();
     data.append("tenants", uploadedFile);
-    data.append("year", year);
+    data.append("year", year.toString());
     data.append("month", month);
 
     // @ts-ignore
@@ -198,11 +198,11 @@ const Dashboard = () => {
               className="border mb-4"
               onChange={(e) => setMonth(e.target.value)}
             >
-              <option hidden selected defaultChecked>
+              {/* <option hidden selected defaultChecked>
                 Select Month
-              </option>
+              </option> */}
               {months.map((m) => (
-                <option key={m} value={m} className="capitalize">
+                <option key={m} value={month} className="capitalize">
                   {m}
                 </option>
               ))}

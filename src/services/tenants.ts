@@ -25,7 +25,11 @@ export const GetTenantsMutation = (month: string, year: number) => {
 };
 
 export const GetTenantQuery = (id: string) => {
-  return useQuery("tenant", () => {
-    return Api.get(`user/tenants/${id}`).then((res) => res.data);
-  });
+  return useQuery(
+    "tenant",
+    () => {
+      return Api.get(`user/tenants/${id}`).then((res) => res.data);
+    },
+    { cacheTime: 0 }
+  );
 };
