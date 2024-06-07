@@ -23,7 +23,7 @@ import {
   StartAllCampaignsMutation,
   StopAllCampaignsMutation,
 } from "@/services/campaign";
-import { months } from "@/constants/data";
+import { months, years } from "@/constants/data";
 
 const Dashboard = () => {
   const currentMonth = new Date().getMonth();
@@ -177,8 +177,7 @@ const Dashboard = () => {
     });
   };
 
-  const handleCallTenant = (value: string) => {
-    setMonth(value);
+  const handleCallTenant = () => {
     refetch();
   };
 
@@ -241,19 +240,37 @@ const Dashboard = () => {
       </div>
 
       <div className="">
-        <select
-          className="border mb-4"
-          onChange={(e) => handleCallTenant(e.target.value)}
-        >
-          <option hidden selected defaultChecked>
-            Select month to display
-          </option>
-          {months.map((m) => (
-            <option key={m} value={m} className="capitalize">
-              {m}
+        <div className="flex flex-col md:flex-row gap-5">
+          <select
+            className="border mb-4"
+            onChange={(e) => setMonth(e.target.value)}
+          >
+            <option hidden selected defaultChecked>
+              Select month
             </option>
-          ))}
-        </select>
+            {months.map((m) => (
+              <option key={m} value={m} className="capitalize">
+                {m}
+              </option>
+            ))}
+          </select>
+          <select
+            className="border mb-4"
+            onChange={(e) => setYear(parseInt(e.target.value))}
+          >
+            <option hidden selected defaultChecked>
+              Select year
+            </option>
+            {years.map((y) => (
+              <option key={y} value={y} className="capitalize">
+                {y}
+              </option>
+            ))}
+          </select>
+        </div>
+        <Button onClick={handleCallTenant} className="w-auto">
+          View
+        </Button>
       </div>
 
       {/* Tenants details table */}

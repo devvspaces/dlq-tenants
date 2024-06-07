@@ -23,7 +23,7 @@ const InputField = ({
       {isPassword ? (
         <div className="mt-3">
           <label className="text-sm mb-1 font-bold block">{label}</label>
-          <div className="relative flex bg-white rounded-md my-2 border border-[#CBD5E1] focus:border-primary w-full text-primary font-bold  placeholder:text-offgrey">
+          <div className="relative flex bg-white rounded-md my-2 border border-[#676E7629] shadow-sm focus:border-primary w-full text-primary font-bold  placeholder:text-offgrey">
             <input
               id={id}
               value={value}
@@ -54,7 +54,7 @@ const InputField = ({
             onChange={onChange}
             type={type}
             placeholder={placeholder}
-            className="bg-white rounded-md my-2 border border-[#CBD5E1] focus:border-primary w-full text-primary font-bold outline-none py-3 px-4 placeholder:text-offgrey"
+            className="bg-white rounded-md my-2 border border-[#676E7629] shadow-sm focus:border-primary w-full text-primary font-bold outline-none py-3 px-4 placeholder:text-offgrey"
           />
         </div>
       )}
