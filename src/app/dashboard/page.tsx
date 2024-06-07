@@ -41,6 +41,7 @@ const Dashboard = () => {
     data: tenants,
     isLoading: isLoadingTenants,
     refetch,
+    isFetching,
   } = GetTenantsMutation(month, year);
   const { mutate: mutateUploadTenant, isLoading: isLoadingUploadTenant } =
     UploadTenantsMutation();
@@ -289,7 +290,7 @@ const Dashboard = () => {
           <TableBody>
             {
               // check if data is loading
-              isLoadingTenants ? (
+              isLoadingTenants || isFetching ? (
                 <TableRow>
                   <TableCell colSpan={5} className="text-center py-10">
                     <Loading color="#232555" />
