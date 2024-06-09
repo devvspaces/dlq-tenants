@@ -14,7 +14,11 @@ import {
 import Papa from "papaparse";
 import RetellCall from "@/components/RetellCall";
 import Button from "@/components/Button";
-import { GetTenantsMutation, UploadTenantsMutation } from "@/services/tenants";
+import {
+  DeleteTenantsMutation,
+  GetTenantsMutation,
+  UploadTenantsMutation,
+} from "@/services/tenants";
 import { Tenant } from "@/utils/types";
 import Loading from "@/components/Loading";
 import { useToast } from "@/components/ui/use-toast";
@@ -24,6 +28,7 @@ import {
   StopAllCampaignsMutation,
 } from "@/services/campaign";
 import { months, years } from "@/constants/data";
+import DeleteTenant from "@/components/DeleteTenant";
 
 const Dashboard = () => {
   const currentMonth = new Date().getMonth();
@@ -32,6 +37,9 @@ const Dashboard = () => {
   const [uploadedFile, setUploadedFile] = useState<File>();
   const [month, setMonth] = useState(months[currentMonth]);
   const [year, setYear] = useState(currentYear);
+
+  const [filterMonth, setFilterMonth] = useState(months[currentMonth]);
+  const [filterYear, setFilterYear] = useState(currentYear);
   const [amountBalance, setAmountBalance] = useState("");
 
   const { toast } = useToast();
@@ -42,13 +50,15 @@ const Dashboard = () => {
     isLoading: isLoadingTenants,
     refetch,
     isFetching,
-  } = GetTenantsMutation(month, year);
+  } = GetTenantsMutation(filterMonth, filterYear);
   const { mutate: mutateUploadTenant, isLoading: isLoadingUploadTenant } =
     UploadTenantsMutation();
   const { mutate: mutateStartAll, isLoading: isLoadingStartAll } =
     StartAllCampaignsMutation();
   const { mutate: mutateStopAll, isLoading: isLoadingStopAll } =
     StopAllCampaignsMutation();
+  const { mutate: mutateDeleteAll, isLoading: isDeletingAll } =
+    DeleteTenantsMutation(tenants?.data?.map((tenant: Tenant) => tenant.id));
 
   useEffect(() => {
     if (!isLoadingTenants && tenants.data) {
@@ -64,9 +74,16 @@ const Dashboard = () => {
   }, [tenants, isLoadingTenants]);
 
   const handleUploadTenant = () => {
+    console.log("MONTH", month);
     if (!month) {
       return toast({
         title: "Please select the month",
+        variant: "destructive",
+      });
+    }
+    if (!year) {
+      return toast({
+        title: "Please enter the year",
         variant: "destructive",
       });
     }
@@ -114,6 +131,18 @@ const Dashboard = () => {
       },
       onError: () =>
         toast({ title: "Error", description: "Unable to start campaigns" }),
+    });
+  };
+
+  const handleDeleteAll = () => {
+    mutateDeleteAll(undefined, {
+      onSuccess: () => {
+        toast({ title: "Campaigns deleted successfully" });
+        refetch();
+      },
+      onError: () => {
+        toast({ title: "Error", description: "Unable to delete campaigns" });
+      },
     });
   };
 
@@ -196,34 +225,45 @@ const Dashboard = () => {
           </div>
         </div>
         <div className="w-full">
-          <h1>Campaigns</h1>
+          <h1>Add new Campaign</h1>
           <div className="">
-            <p>Select month</p>
-            <select
-              className="border mb-4"
-              onChange={(e) => setMonth(e.target.value)}
-            >
-              <option hidden selected defaultChecked>
-                Select Month
-              </option>
-              {months.map((m) => (
-                <option key={m} value={month} className="capitalize">
-                  {m}
+            <div className="flex justify-between items-center mb-4">
+              <p>Select month</p>
+              <select
+                className="border mb-4"
+                onChange={(e) => setMonth(e.target.value)}
+                defaultValue={month}
+              >
+                <option hidden selected defaultChecked>
+                  Select Month
                 </option>
-              ))}
-            </select>
+                {months.map((m) => (
+                  <option key={m} value={m} className="capitalize">
+                    {m}
+                  </option>
+                ))}
+              </select>
+            </div>
             <div className="flex justify-between items-center mb-4">
               <p>Year</p>
               <input
                 type=""
                 value={year}
-                onChange={(e) => setYear(parseInt(e.target.value))}
+                onChange={(e) => {
+                  if (isNaN(parseInt(e.target.value))) {
+                    setYear(currentYear);
+                    return;
+                  }
+                  setYear(parseInt(e.target.value));
+                }}
                 className="border border-black outline-none"
               />
             </div>
           </div>
-          <p>Upload tenant details</p>
-          <FileInput maxSize={maxSize} onFileChange={handleFileChange} />
+          <div className="flex justify-between items-center mb-4">
+            <p>Upload tenant details</p>
+            <FileInput maxSize={maxSize} onFileChange={handleFileChange} />
+          </div>
           <Button
             className="my-5"
             isDisabled={isLoadingUploadTenant}
@@ -234,17 +274,24 @@ const Dashboard = () => {
         </div>
       </div>
 
-      <div className="flex justify-end mt-5">
+      <div className="flex justify-end mt-5 gap-5">
         <Button className="!w-auto" onClick={handleStartAll}>
           Start All
         </Button>
+        <button
+          className="!w-auto px-8 py-2 rounded-full text-sm cursor-pointer text-white bg-red-600"
+          onClick={handleDeleteAll}
+        >
+          {isDeletingAll ? "Deleting..." : "Delete All"}
+        </button>
       </div>
 
       <div className="">
         <div className="flex flex-col md:flex-row gap-5">
           <select
             className="border mb-4"
-            onChange={(e) => setMonth(e.target.value)}
+            onChange={(e) => setFilterMonth(e.target.value)}
+            defaultValue={filterMonth}
           >
             <option hidden selected defaultChecked>
               Select month
@@ -257,7 +304,8 @@ const Dashboard = () => {
           </select>
           <select
             className="border mb-4"
-            onChange={(e) => setYear(parseInt(e.target.value))}
+            onChange={(e) => setFilterYear(parseInt(e.target.value))}
+            defaultValue={filterYear}
           >
             <option hidden selected defaultChecked>
               Select year
@@ -325,7 +373,15 @@ const Dashboard = () => {
                       {tenant.delinquency_notes}
                     </TableCell>
                     <TableCell className="">
-                      <RetellCall id={tenant.id} />
+                      <div
+                        style={{
+                          display: "flex",
+                          gap: "10px",
+                        }}
+                      >
+                        <RetellCall id={tenant.id} />
+                        <DeleteTenant id={tenant.id} refetch={refetch} />
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))

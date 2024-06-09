@@ -33,3 +33,33 @@ export const GetTenantQuery = (id: string) => {
     { cacheTime: 0, refetchOnMount: true }
   );
 };
+
+export const DeleteTenantMutation = (id: number) => {
+  return useMutation(() => {
+    return axios.delete(
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}user/tenants/${id}`,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          "x-api-key": Auth.getToken(),
+        },
+      }
+    );
+  });
+};
+
+
+export const DeleteTenantsMutation = (ids: number[]) => {
+  return useMutation(() => {
+    return fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}user/tenants`, {
+      method: "DELETE",
+      body: JSON.stringify({
+        ids
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": Auth.getToken() as string,
+      },
+    });
+  });
+};

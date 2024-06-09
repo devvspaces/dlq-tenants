@@ -249,4 +249,9 @@ export const months = [
   "december",
 ];
 
-export const years = ["2024", "2025", "2026", "2027", "2028", "2029", "2030"];
+// export const years = ["2024", "2025", "2026", "2027", "2028", "2029", "2030"];
+
+export const years = Array.from({ length: 20 }, (_, i) => {
+  const year = new Date().getFullYear() - 10;
+  return year + i;
+});
