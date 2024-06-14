@@ -12,7 +12,7 @@ import Api from "@/utils/api";
 import { AxiosResponse } from "axios";
 import moment from "moment";
 
-const TenantDetails = ({ id }: { id: string }) => {
+const TenantDetails = ({ id, setScreen }: { id: string; setScreen: any }) => {
   const [convoIndex, setConvoIndex] = useState(-1);
 
   const { data: campaigns, isLoading: isLoadingCampaigns } =
@@ -35,8 +35,22 @@ const TenantDetails = ({ id }: { id: string }) => {
   return (
     <>
       <div className="flex gap-5 items-center">
-        <Link href={DASHBOARD}>Back</Link>
-        <p>Tenant {id}</p>
+        <Link href={DASHBOARD}>
+          <button
+            className="bg-blue-500 text-white p-2 rounded"
+          >
+            Back
+          </button>
+        </Link>
+          <button
+            className="bg-green-500 text-white p-2 rounded"
+            onClick={() => {
+              setScreen(1);
+            }}
+          >
+            Edit
+          </button>
+        <h3>Tenant {id}</h3>
       </div>
 
       <div className="mt-10">

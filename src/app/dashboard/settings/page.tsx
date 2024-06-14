@@ -15,10 +15,12 @@ const Settings = () => {
   const [isOpened, setIsOpened] = useState(false);
   const [newVoice, setNewVoice] = useState("");
   const [prompt, setPrompt] = useState("");
+  const [voiceSpeed, setVoiceSpeed] = useState(0);
   const [settingsData, setSettingsData] = useState<UpdateSettings>({
     voice_id: "",
     begin_message: "",
     general_prompt: "",
+    voice_speed: 0,
   });
 
   const { data: settings, isLoading, refetch } = GetSettingsQuery();
@@ -28,6 +30,13 @@ const Settings = () => {
   useEffect(() => {
     if (!isLoading && settings?.data) {
       setPrompt(settings.data?.begin_message);
+      setVoiceSpeed(settings.data?.voice_speed);
+      setSettingsData({
+        voice_id: settings.data?.voice,
+        begin_message: settings.data?.begin_message,
+        general_prompt: settings.data?.general_prompt,
+        voice_speed: settings.data?.voice_speed,
+      });
     }
   }, [isLoading, settings?.data]);
 
@@ -109,9 +118,24 @@ const Settings = () => {
             <p className="font-bold">Language: </p>
             <p>{settings.data?.language}</p>
           </div>
+          <div className="mt-5 flex items-center">
+            <p className="font-bold">Begin message: </p>
+            <input type="checkbox" className="ml-2 border" />
+          </div>
           <div className="mt-5">
             <p className="font-bold">Voice Speed: </p>
-            <p>{settings.data?.voice_speed}</p>
+            <input
+              type="number"
+              value={voiceSpeed}
+              onChange={(e) => {
+                setSettingsData({
+                  ...settingsData,
+                  voice_speed: parseFloat(e.target.value),
+                });
+                setVoiceSpeed(parseFloat(e.target.value));
+              }}
+              className="w-20 mt-2 p-2 border"
+            />
           </div>
           <div className="flex items-center gap-10 justify-between mb-5">
             <div className="mt-5">
@@ -121,10 +145,8 @@ const Settings = () => {
                 onChange={(e) => handleUpdatePrompt(e.target.value)}
                 className="w-full p-5 outline-none border border-[#EBEBEB] rounded-md"
                 rows={3}
+                style={{ width: "500px" }}
               ></textarea>
-              <p className="text-sm mt-2 italic text-center">
-                If you want the AI to speak first, clear the input box above.
-              </p>
             </div>
           </div>
           <div className="flex items-center gap-10 justify-between mb-5">

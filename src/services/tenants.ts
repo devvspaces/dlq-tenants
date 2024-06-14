@@ -18,6 +18,20 @@ export const UploadTenantsMutation = () => {
   });
 };
 
+export const UpdateTenantMutation = (id: string) => {
+  return useMutation((data: any) => {
+    return axios.patch(
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}user/tenants/${id}`,
+      data,
+      {
+        headers: {
+          "x-api-key": Auth.getToken(),
+        },
+      }
+    );
+  });
+};
+
 export const GetTenantsMutation = (month: string, year: number) => {
   return useQuery("tenants", () => {
     return Api.get(`user/tenants/${month}/${year}`).then((res) => res.data);
@@ -48,13 +62,12 @@ export const DeleteTenantMutation = (id: number) => {
   });
 };
 
-
 export const DeleteTenantsMutation = (ids: number[]) => {
   return useMutation(() => {
     return fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}user/tenants`, {
       method: "DELETE",
       body: JSON.stringify({
-        ids
+        ids,
       }),
       headers: {
         "Content-Type": "application/json",

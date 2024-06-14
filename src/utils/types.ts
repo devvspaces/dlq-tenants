@@ -134,4 +134,5 @@ export type UpdateSettings = {
   voice_id: string;
   begin_message: string;
   general_prompt?: string;
+  voice_speed: number;
 };
