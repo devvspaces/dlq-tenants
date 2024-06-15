@@ -98,7 +98,7 @@ const EditTenant = ({ id, setScreen }: { id: string; setScreen: any }) => {
     }
 
     updateTenant({
-      unit: parseInt(formData.unit),
+      unit: formData.unit,
       name: formData.name,
       phone: formData.phone,
       move_in: formData.move_in,
@@ -251,7 +251,7 @@ const EditTenant = ({ id, setScreen }: { id: string; setScreen: any }) => {
               onChange={(e) => {
                 setFormData({
                   ...formData,
-                  unit: e.target.value ? parseInt(e.target.value) : undefined,
+                  unit: e.target.value,
                 });
               }}
             />
