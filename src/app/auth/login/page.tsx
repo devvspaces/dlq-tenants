@@ -51,7 +51,7 @@ const Login = () => {
       <Button
         isDisabled={isLoading}
         className="!bg-white !border-[#EAF8E9] !rounded-md !text-black flex items-center justify-center gap-3 hover:!shadow-sm hover:!bg-[#EAF8E9]"
-        onClick={() => Auth.signInWithGoogle()}
+        onClick={() => Auth.signInWithGoogle(toast)}
       >
         Log in with Google <Image src={google} alt="google" />
       </Button>

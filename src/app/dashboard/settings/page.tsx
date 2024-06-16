@@ -7,7 +7,11 @@ import SelectGSModal from "@/components/modals/SelectGS";
 import SelectVoiceModal from "@/components/modals/SelectVoice";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { useToast } from "@/components/ui/use-toast";
-import { GetSettingsQuery, UpdateSettingsMutation } from "@/services/settings";
+import {
+  GetProfile,
+  GetSettingsQuery,
+  UpdateSettingsMutation,
+} from "@/services/settings";
 import { UpdateSettings } from "@/utils/types";
 import React, { useEffect, useState } from "react";
 
@@ -19,25 +23,37 @@ const Settings = () => {
     begin_message: "",
     general_prompt: "",
     voice_speed: 0,
+    company_name: "",
   });
 
   const { data: settings, isLoading, refetch } = GetSettingsQuery();
+  const {
+    data: userProfile,
+    isLoading: isLoadingProfile,
+    refetch: refetchProfile,
+  } = GetProfile();
   const { mutate, isLoading: isLoadingUpdateSettings } =
     UpdateSettingsMutation();
 
   useEffect(() => {
-    if (!isLoading && settings?.data) {
+    if (
+      !isLoading &&
+      !isLoadingProfile &&
+      settings?.data &&
+      userProfile?.data
+    ) {
       setSettingsData({
         voice_id: settings.data?.voice,
         begin_message: settings.data?.begin_message,
         general_prompt: settings.data?.general_prompt,
         voice_speed: settings.data?.voice_speed,
+        company_name: userProfile.data.company_name,
       });
       if (settings.data?.begin_message) {
         setBeginMessage(true);
       }
     }
-  }, [isLoading, settings?.data]);
+  }, [isLoading, isLoadingProfile, settings?.data, userProfile?.data]);
 
   const { toast } = useToast();
 
@@ -69,6 +85,14 @@ const Settings = () => {
       toast({
         title: "Error",
         description: "Please enter a general prompt",
+        variant: "destructive",
+      });
+    }
+
+    if (!settingsData.company_name) {
+      toast({
+        title: "Error",
+        description: "Please enter a company name",
         variant: "destructive",
       });
     }
@@ -105,9 +129,27 @@ const Settings = () => {
         <Loading color="#000" />
       ) : (
         <div className="mt-10 md:w-4/5 mx-auto">
-          <div className="mt-5">
+          <div className="mt-5 mb-4">
             <p className="font-bold">Agent Name: </p>
             <p>{settings.data?.agent_name}</p>
+          </div>
+          <div
+            style={{
+              maxWidth: "300px",
+            }}
+          >
+            <p className="font-bold">Company Name: </p>
+            <input
+              type="text"
+              value={settingsData.company_name}
+              className="w-full mt-2 p-2 border"
+              onChange={(e) => {
+                setSettingsData({
+                  ...settingsData,
+                  company_name: e.target.value,
+                });
+              }}
+            />
           </div>
           <div className="mt-5">
             <p className="font-bold">Language: </p>

@@ -2,12 +2,13 @@ import { jwtDecode } from "jwt-decode";
 import { signInWithPopup, getIdToken } from "firebase/auth";
 import { auth, provider } from "@/lib/firebase";
 import { LOGIN, DASHBOARD } from "@/constants/path";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { AuthResponse } from "./types";
 import { setCookie } from "cookies-next";
+import { title } from "process";
 
 // SignIn with google
-const signInWithGoogle = () => {
+const signInWithGoogle = (toast: any) => {
   signInWithPopup(auth, provider).then(async (data) => {
     const token = await data.user.getIdToken();
 
@@ -17,6 +18,51 @@ const signInWithGoogle = () => {
           "x-api-key": token,
         },
       })
+      .then((res: any) => {
+        const { data: responseData, success } = res.data as AuthResponse;
+
+        if (success) {
+          // set token in cookie
+          setCookie("token", responseData.token);
+
+          if (typeof window !== "undefined") {
+            window.localStorage.setItem("accessToken", responseData.token);
+
+            window.localStorage.setItem("user", JSON.stringify(data.user));
+
+            window.location.href = DASHBOARD;
+          }
+        }
+      })
+      .catch((error: AxiosError) => {
+        console.log(error);
+        if ((error.response?.data as any)?.message) {
+          toast({
+            title: "Error",
+            description: (error.response?.data as any)?.message,
+            variant: "destructive",
+          });
+        }
+      });
+  });
+};
+
+const signUpWithGoogle = (company_name: string) => {
+  signInWithPopup(auth, provider).then(async (data) => {
+    const token = await data.user.getIdToken();
+
+    axios
+      .post(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}auth/google`,
+        {
+          company_name,
+        },
+        {
+          headers: {
+            "x-api-key": token,
+          },
+        }
+      )
       .then((res: any) => {
         const { data: responseData, success } = res.data as AuthResponse;
 
@@ -95,6 +141,7 @@ const isAuthenticated = () => {
 
 const Auth = {
   signInWithGoogle,
+  signUpWithGoogle,
   isAuthenticated,
   getDecodedJwt,
   setToken,

@@ -135,4 +135,5 @@ export type UpdateSettings = {
   begin_message: string;
   general_prompt?: string;
   voice_speed: number;
+  company_name: string;
 };

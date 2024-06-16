@@ -22,24 +22,13 @@ import { useToast } from "@/components/ui/use-toast";
 import Auth from "@/utils/auth";
 
 import google from "@/assets/icons/google.png";
+import { title } from "process";
 
 const Register = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  //   Form validation
-  const form = useForm<z.infer<typeof registerSchema>>({
-    resolver: zodResolver(registerSchema),
-    defaultValues: {
-      name: "",
-      email: "",
-      password: "",
-    },
-  });
+  const [companyName, setCompanyName] = useState<string>("");
 
   const { toast } = useToast();
-  const { handleSubmit } = form;
-
-  const onSubmit = async (values: z.infer<typeof registerSchema>) => {};
 
   return (
     <>
@@ -49,81 +38,37 @@ const Register = () => {
         </h1>
       </div>
 
+      <div>
+        <div className="w-full mb-5">
+          <p className="font-bold">Company Name</p>
+          <input
+            type="text"
+            value={companyName}
+            className="w-full mt-2 p-2 border"
+            onChange={(e) => {
+              setCompanyName(e.target.value);
+            }}
+          />
+        </div>
+        {isLoading && <Loading />}
+      </div>
+
       <Button
         className="!bg-white !border-[#EAF8E9] !rounded-md !text-black flex items-center justify-center gap-3 hover:!shadow-sm hover:!bg-[#EAF8E9]"
-        onClick={() => Auth.signInWithGoogle()}
+        onClick={() => {
+          if (!companyName) {
+            toast({
+              title: "Error",
+              description: "Company name is required",
+              variant: "destructive",
+            });
+            return;
+          }
+          Auth.signUpWithGoogle(companyName);
+        }}
       >
         Register with Google <Image src={google} alt="google" />
       </Button>
-
-      <div className="items-center text-offgrey text-sm my-10 gap-2 hidden">
-        <hr className="border-b border-[#E2E8F0] w-full" />
-        <p>or</p>
-        <hr className="border-b border-[#E2E8F0] w-full" />
-      </div>
-
-      <Form {...form}>
-        <form onSubmit={handleSubmit(onSubmit)} className="mt-3 hidden">
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <InputField
-                    placeholder="mikedan@mail.com"
-                    label="Name"
-                    type="text"
-                    id="name"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <InputField
-                    placeholder="Enter your email"
-                    label="Email Address"
-                    type="email"
-                    id="email"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="password"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <InputField
-                    placeholder="********"
-                    label="Password"
-                    id="password"
-                    isPassword
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <Button type="submit" className="mt-5 flex justify-center">
-            {isLoading ? <Loading /> : "Register"}
-          </Button>
-        </form>
-      </Form>
 
       <p className="text-center text-offgrey text-sm mt-2">
         Already have an account?{" "}
