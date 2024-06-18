@@ -22,7 +22,7 @@ const TenantDetails = ({ id, setScreen }: { id: string; setScreen: any }) => {
   const { data: conversation, isLoading: isLoadingConversation } = useQuery(
     ["conversation", campaigns?.data[convoIndex]?.id],
     () =>
-      Api.get(`campaigns/detail/${campaigns?.data[convoIndex]?.id}`).then(
+      Api.get(`campaigns/${id}/campaign/${campaigns?.data[convoIndex]?.id}`).then(
         (res: AxiosResponse) => res.data
       ),
     { enabled: convoIndex > -1 }
