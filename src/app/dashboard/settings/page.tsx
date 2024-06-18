@@ -107,6 +107,7 @@ const Settings = () => {
           console.log(data);
           toast({ title: "Settings Updated successfully" });
           refetch();
+          refetchProfile();
         },
         onError: () => {
           toast({
