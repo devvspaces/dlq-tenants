@@ -97,20 +97,26 @@ const Settings = () => {
       });
     }
 
-    mutate(settingsData as any, {
-      onSuccess: (data) => {
-        console.log(data);
-        toast({ title: "Settings Updated successfully" });
-        refetch();
-      },
-      onError: () => {
-        toast({
-          title: "Error",
-          description: "Unable to update settings",
-          variant: "destructive",
-        });
-      },
-    });
+    mutate(
+      {
+        ...settingsData,
+        begin_message: beginMessage ? settingsData.begin_message : "",
+      } as any,
+      {
+        onSuccess: (data) => {
+          console.log(data);
+          toast({ title: "Settings Updated successfully" });
+          refetch();
+        },
+        onError: () => {
+          toast({
+            title: "Error",
+            description: "Unable to update settings",
+            variant: "destructive",
+          });
+        },
+      }
+    );
   };
 
   return (
