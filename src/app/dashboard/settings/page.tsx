@@ -24,6 +24,7 @@ const Settings = () => {
     general_prompt: "",
     voice_speed: 0,
     company_name: "",
+    agent_name: "",
   });
 
   const { data: settings, isLoading, refetch } = GetSettingsQuery();
@@ -48,6 +49,7 @@ const Settings = () => {
         general_prompt: settings.data?.general_prompt,
         voice_speed: settings.data?.voice_speed,
         company_name: userProfile.data.company_name,
+        agent_name: settings.data?.agent_name,
       });
       if (settings.data?.begin_message) {
         setBeginMessage(true);
@@ -100,6 +102,7 @@ const Settings = () => {
     mutate(
       {
         ...settingsData,
+        first_name: settingsData.agent_name,
         begin_message: beginMessage ? settingsData.begin_message : "",
       } as any,
       {
@@ -136,9 +139,24 @@ const Settings = () => {
         <Loading color="#000" />
       ) : (
         <div className="mt-10 md:w-4/5 mx-auto">
-          <div className="mt-5 mb-4">
+          <div
+            className="mt-5 mb-4"
+            style={{
+              maxWidth: "300px",
+            }}
+          >
             <p className="font-bold">Agent Name: </p>
-            <p>{settings.data?.agent_name}</p>
+            <input
+              type="text"
+              value={settingsData.agent_name}
+              className="w-full mt-2 p-2 border"
+              onChange={(e) => {
+                setSettingsData({
+                  ...settingsData,
+                  agent_name: e.target.value,
+                });
+              }}
+            />
           </div>
           <div
             style={{
@@ -213,6 +231,15 @@ const Settings = () => {
                   rows={3}
                   style={{ width: "500px" }}
                 ></textarea>
+                <p className="text-sm text-gray-500 mt-2">
+                  Special format options:
+                  <ol style={{
+                    paddingLeft: "20px"
+                  }} className="list-decimal">
+                    <li>Use {`{{COMPANY_NAME}}`} to insert the company name</li>
+                    <li>Use {`{{AGENT_NAME}}`} to insert the agent name</li>
+                  </ol>
+                </p>
               </div>
             </div>
           )}
@@ -235,6 +262,15 @@ const Settings = () => {
               rows={10}
               style={{ width: "700px" }}
             ></textarea>
+            <p className="text-sm text-gray-500 mt-2">
+              Special format options:
+              <ol style={{
+                paddingLeft: "20px"
+              }} className="list-decimal">
+                <li>Use {`{{COMPANY_NAME}}`} to insert the company name</li>
+                <li>Use {`{{AGENT_NAME}}`} to insert the agent name</li>
+              </ol>
+            </p>
           </div>
         </div>
       )}

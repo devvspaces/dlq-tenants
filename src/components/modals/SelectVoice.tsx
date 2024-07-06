@@ -29,6 +29,14 @@ const SelectVoiceModal = ({
     setSelectedVoice(voice);
   };
 
+  const customLoader = ({ src, width, quality }: {
+    src: string;
+    width: number | string;
+    quality?: number;
+  }) => {
+    return `${src}?w=${width}&q=${quality || 75}`
+  }
+
   return (
     <DialogContent className="p-10">
       <DialogHeader className="max-h-80">
@@ -42,18 +50,25 @@ const SelectVoiceModal = ({
               <div
                 key={index}
                 onClick={() => setVoice(index, voice?.voice_id)}
-                className="cursor-pointer text-xs my-3 py-5 px-3 flex items-center justify-between border border-[#EBEBEB] rounded-md"
+                className="cursor-pointer text-xs my-3 py-5 px-3 flex items-center border border-[#EBEBEB] rounded-md"
               >
+                <Image
+                  loader={customLoader}
+                  width={50}
+                  height={50}
+                  src={voice?.avatar_url}
+                  alt="tick"
+                  className="mr-3"
+                />
                 <div className="">
-                  <p className="font-semibold mb-2">{voice?.name}</p>
+                  <p className="font-semibold mb-2">{voice?.voice_name}</p>
                   <div className="flex items-center gap-3">
                     <p>{voice?.gender}</p>
                     <p>{voice?.accent}</p>
-                    <p>${voice?.pricing}</p>
                   </div>
                 </div>
                 <Image
-                  className={selectedIndex === index ? "block" : "hidden"}
+                  className={selectedIndex === index ? "block ml-auto" : "hidden"}
                   src={tick}
                   alt="tick"
                 />

@@ -234,7 +234,7 @@ const Dashboard = () => {
                 onChange={(e) => setMonth(e.target.value)}
                 defaultValue={month}
               >
-                <option hidden selected defaultChecked>
+                <option hidden defaultChecked>
                   Select Month
                 </option>
                 {months.map((m) => (
@@ -293,7 +293,7 @@ const Dashboard = () => {
             onChange={(e) => setFilterMonth(e.target.value)}
             defaultValue={filterMonth}
           >
-            <option hidden selected defaultChecked>
+            <option hidden defaultChecked>
               Select month
             </option>
             {months.map((m) => (
@@ -307,7 +307,7 @@ const Dashboard = () => {
             onChange={(e) => setFilterYear(parseInt(e.target.value))}
             defaultValue={filterYear}
           >
-            <option hidden selected defaultChecked>
+            <option hidden defaultChecked>
               Select year
             </option>
             {years.map((y) => (

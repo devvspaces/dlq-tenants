@@ -136,4 +136,5 @@ export type UpdateSettings = {
   general_prompt?: string;
   voice_speed: number;
   company_name: string;
+  agent_name: string;
 };
